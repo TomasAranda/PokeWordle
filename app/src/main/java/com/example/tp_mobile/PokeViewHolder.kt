@@ -7,9 +7,9 @@ import com.squareup.picasso.Picasso
 
 class PokeViewHolder(view: View):RecyclerView.ViewHolder(view) {
     private val binding = ItemPokeBinding.bind(view)
+
     fun bind(pokemon:String){
         Picasso.get().load(pokemon).into(binding.ivPokemon)
         binding.ivPokemon
-
     }
 }
