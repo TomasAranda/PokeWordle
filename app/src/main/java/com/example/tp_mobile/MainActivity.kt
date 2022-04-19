@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity(),SearchView.OnQueryTextListener {
      private fun getRetrofit():Retrofit{
       return Retrofit.Builder()
           //.baseUrl("https://pokeapi.co/api/v2/")
-          .baseUrl("https://dog.ceo/api/breed/")
+          .baseUrl("https://pokeapi.co/api/v2/pokemon/")
           .addConverterFactory(GsonConverterFactory.create())
           .build()
     }
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(),SearchView.OnQueryTextListener {
     private fun searchFunc(query:String){
         //todo dentro del lauch este queda en un hilo secundario
         CoroutineScope(Dispatchers.IO).launch {
-            val call = getRetrofit().create(APIService::class.java).getPokemon("$query/images")
+            val call = getRetrofit().create(APIService::class.java).getPokemon("$query")
             val pokes = call.body()
             runOnUiThread{
                 if (call.isSuccessful){
