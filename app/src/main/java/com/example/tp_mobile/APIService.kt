@@ -6,5 +6,5 @@ import retrofit2.http.Url
 
 interface APIService {
     @GET
-    suspend fun getPokemon(@Url url:String):Response<PokeResp>
+    suspend fun getPokemon(@Url url:String):Response<Pokemon>
 }

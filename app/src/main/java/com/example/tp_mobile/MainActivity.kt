@@ -13,9 +13,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity(),SearchView.OnQueryTextListener {
-     lateinit var binding:ActivityMainBinding
-     private lateinit var adapter: PokeAdapter
-     private val pokemonImage = mutableListOf<String>()
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: PokeAdapter
+    private val pokemonImages = mutableListOf<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -25,42 +26,41 @@ class MainActivity : AppCompatActivity(),SearchView.OnQueryTextListener {
     }
 
      private fun initRecyclerView() {
-         adapter = PokeAdapter(pokemonImage)
+         adapter = PokeAdapter(pokemonImages)
          binding.rvPokemon.layoutManager = LinearLayoutManager(this)
          binding.rvPokemon.adapter = adapter
     }
 
-     private fun getRetrofit():Retrofit{
-      return Retrofit.Builder()
-          //.baseUrl("https://pokeapi.co/api/v2/")
+     private fun getRetrofit(): Retrofit {
+        return Retrofit.Builder()
           .baseUrl("https://pokeapi.co/api/v2/pokemon/")
           .addConverterFactory(GsonConverterFactory.create())
           .build()
     }
-    //Se crea corutina para ejecutar todo dentro de un hilo secundario
-    private fun searchFunc(query:String){
-        //todo dentro del lauch este queda en un hilo secundario
+
+    // Crea corutina para ejecutar la busqueda dentro de un hilo secundario
+    private fun searchFunc(query: String) {
+        // La llamada a la API dentro del lauch queda en un hilo secundario
         CoroutineScope(Dispatchers.IO).launch {
-            val call = getRetrofit().create(APIService::class.java).getPokemon("$query")
-            val pokes = call.body()
+            val call = getRetrofit().create(APIService::class.java).getPokemon(query)
+            val pokemon = call.body()
             runOnUiThread{
                 if (call.isSuccessful){
-                   val imagePokemon = pokes?.pokemon ?: emptyList()
-                    pokemonImage.clear()
-                    pokemonImage.addAll(imagePokemon)
-                    adapter.notifyDataSetChanged()
+                    val newImage = pokemon?.sprites?.other?.officialArtwork?.frontDefault
+                    if (newImage != null) {
+                        pokemonImages.add(0, newImage)
+                    }
+                    binding.rvPokemon.adapter?.notifyItemInserted(0)
                 }
                 else{
                     showError()
                 }
             }
-
-
         }
     }
 
     private fun showError() {
-        Toast.makeText(this,"Paso Algo",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"No se encontró el Pokemon",Toast.LENGTH_SHORT).show()
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {

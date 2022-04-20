@@ -2,10 +2,22 @@ package com.example.tp_mobile
 
 import com.google.gson.annotations.SerializedName
 
-data class PokeResp(
-    @SerializedName("id") var url: String,
-    @SerializedName("sprites") var pokemon: List<String>
-    //@SerializedName("status") var url: String,
-    //@SerializedName("message") var pokemon: List<String>
+data class Pokemon(
+    val id: Int,
+    val name: String,
+    val sprites: PokemonSprites
+)
 
+data class PokemonSprites(
+    val other: OtherSprites?
+)
+
+data class OtherSprites (
+    @SerializedName("official-artwork")
+    val officialArtwork: OfficialArtwork?
+)
+
+data class OfficialArtwork (
+    @SerializedName("front_default")
+    val frontDefault: String?
 )
