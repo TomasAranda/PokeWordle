@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tp_mobile.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
@@ -12,23 +13,14 @@ import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity(),SearchView.OnQueryTextListener {
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var adapter: PokeAdapter
     private val pokemonImages = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.svPoke.setOnQueryTextListener(this)
-        initRecyclerView()
-    }
-
-     private fun initRecyclerView() {
-         adapter = PokeAdapter(pokemonImages)
-         binding.rvPokemon.layoutManager = LinearLayoutManager(this)
-         binding.rvPokemon.adapter = adapter
     }
 
      private fun getRetrofit(): Retrofit {
@@ -50,7 +42,7 @@ class MainActivity : AppCompatActivity(),SearchView.OnQueryTextListener {
                     if (newImage != null) {
                         pokemonImages.add(0, newImage)
                     }
-                    binding.rvPokemon.adapter?.notifyItemInserted(0)
+                    // TODO("Poner imagen del Pokemon en algun lado")
                 }
                 else{
                     showError()
@@ -63,14 +55,4 @@ class MainActivity : AppCompatActivity(),SearchView.OnQueryTextListener {
         Toast.makeText(this,"No se encontró el Pokemon",Toast.LENGTH_SHORT).show()
     }
 
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        if (!query.isNullOrEmpty()){
-            searchFunc(query.lowercase())
-        }
-        return true
-    }
-
-    override fun onQueryTextChange(newText: String?): Boolean {
-        return true
-    }
 }
