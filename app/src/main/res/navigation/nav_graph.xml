@@ -12,10 +12,18 @@
         tools:layout="@layout/fragment_welcome" >
         <action
             android:id="@+id/action_welcomeFragment_to_gameFragment"
-            app:destination="@id/gameFragment"/>
+            app:destination="@id/gameFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_welcomeFragment_to_statsFragment"
-            app:destination="@id/statsFragment" />
+            app:destination="@id/statsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/gameFragment"
@@ -24,7 +32,11 @@
         tools:layout="@layout/fragment_game" >
         <action
             android:id="@+id/action_gameFragment_to_helpFragment"
-            app:destination="@id/helpFragment" />
+            app:destination="@id/helpFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/statsFragment"
