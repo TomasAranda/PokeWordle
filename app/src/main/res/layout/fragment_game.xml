@@ -7,12 +7,22 @@
     android:gravity="center"
     tools:context=".WelcomeFragment">
 
+    <TextView
+        android:id="@+id/difficulty_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        tools:text="Level" />
+
     <ImageView
         android:layout_width="300dp"
         android:layout_height="500dp"
         android:src="@drawable/poke_wordle_game"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="20dp"
         android:contentDescription="@string/game_image_content_description" />
+
 
     <Button
         android:id="@+id/help_button"

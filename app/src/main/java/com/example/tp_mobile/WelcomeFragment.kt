@@ -22,14 +22,21 @@ class WelcomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<Button>(R.id.play_button).setOnClickListener {
-            val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment()
-            findNavController().navigate(action)
+            showLevelPickerDialog {
+                val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment(it)
+                findNavController().navigate(action)
+            }
         }
 
         view.findViewById<Button>(R.id.stats_button).setOnClickListener {
             val action = WelcomeFragmentDirections.actionWelcomeFragmentToStatsFragment()
             findNavController().navigate(action)
         }
+    }
+
+    private fun showLevelPickerDialog(navigationAction: (String) -> Unit) {
+        val dialog  = LevelsDialogFragment(navigationAction)
+        dialog.show(parentFragmentManager, "Select level")
     }
 
 }
