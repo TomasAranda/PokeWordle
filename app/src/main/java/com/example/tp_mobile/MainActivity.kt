@@ -3,9 +3,6 @@ package com.example.tp_mobile
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
-import androidx.navigation.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tp_mobile.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

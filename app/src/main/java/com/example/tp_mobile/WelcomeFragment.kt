@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 
 class WelcomeFragment : Fragment() {
@@ -24,6 +23,11 @@ class WelcomeFragment : Fragment() {
 
         view.findViewById<Button>(R.id.play_button).setOnClickListener {
             val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment()
+            findNavController().navigate(action)
+        }
+
+        view.findViewById<Button>(R.id.stats_button).setOnClickListener {
+            val action = WelcomeFragmentDirections.actionWelcomeFragmentToStatsFragment()
             findNavController().navigate(action)
         }
     }

@@ -11,12 +11,21 @@
         android:layout_width="300dp"
         android:layout_height="500dp"
         android:src="@drawable/poke_wordle_home"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="30dp"
+        android:contentDescription="@string/welcome_image_content_description" />
 
     <Button
         android:id="@+id/play_button"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Jugar" />
+        android:layout_marginBottom="10dp"
+        android:text="@string/play_button" />
+
+    <Button
+        android:id="@+id/stats_button"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/stats_button"
+        style="?android:attr/buttonBarButtonStyle" />
 
 </LinearLayout>

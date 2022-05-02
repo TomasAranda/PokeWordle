@@ -13,10 +13,27 @@
         <action
             android:id="@+id/action_welcomeFragment_to_gameFragment"
             app:destination="@id/gameFragment"/>
+        <action
+            android:id="@+id/action_welcomeFragment_to_statsFragment"
+            app:destination="@id/statsFragment" />
     </fragment>
     <fragment
         android:id="@+id/gameFragment"
         android:name="com.example.tp_mobile.GameFragment"
         android:label="fragment_game"
-        tools:layout="@layout/fragment_game" />
+        tools:layout="@layout/fragment_game" >
+        <action
+            android:id="@+id/action_gameFragment_to_helpFragment"
+            app:destination="@id/helpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/statsFragment"
+        android:name="com.example.tp_mobile.StatsFragment"
+        android:label="fragment_stats"
+        tools:layout="@layout/fragment_stats" />
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.example.tp_mobile.HelpFragment"
+        android:label="fragment_help"
+        tools:layout="@layout/fragment_help" />
 </navigation>
