@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Tp_Mobile</string>
+    <string name="play_button">Jugar</string>
+    <string name="stats_button">Stats</string>
+    <string name="stats_image_content_description">Stats example view</string>
+    <string name="welcome_image_content_description">Welcome example view</string>
+    <string name="help_button">Help</string>
+    <string name="game_image_content_description">Game example view</string>
+    <string name="help_image_content_description">Help example view</string>
+    <string name="pick_level">Elegí el nivel</string>
 </resources>
