@@ -25,11 +25,6 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<TextView>(R.id.difficulty_level).text = args.chosenGameLevel
-
-        view.findViewById<Button>(R.id.help_button).setOnClickListener {
-            val action = GameFragmentDirections.actionGameFragmentToHelpFragment()
-            findNavController().navigate(action)
-        }
     }
 
 }

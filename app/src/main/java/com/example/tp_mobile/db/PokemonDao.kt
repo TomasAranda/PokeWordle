@@ -11,5 +11,5 @@ interface PokemonDao {
     fun getPokemon(pokemonId: Int): Pokemon
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(pokemon: List<Pokemon>)
+    suspend fun insertAll(pokemon: List<PokemonFromList>)
 }

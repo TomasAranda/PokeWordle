@@ -1,10 +1,16 @@
 package com.example.tp_mobile
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
 import com.example.tp_mobile.databinding.ActivityMainBinding
+import com.example.tp_mobile.db.AppDatabase
+import com.example.tp_mobile.network.PokemonList
 import com.example.tp_mobile.network.PokemonService
+import com.google.gson.GsonBuilder
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,30 +25,45 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        getPokemonList()
     }
 
      private fun getRetrofit(): Retrofit {
-        return Retrofit.Builder()
-          .baseUrl("https://pokeapi.co/api/v2/pokemon/")
-          .addConverterFactory(GsonConverterFactory.create())
+         val gson = GsonBuilder().setLenient().create()
+         return Retrofit.Builder()
+          .baseUrl("https://pokeapi.co/api/v2/")
+          .addConverterFactory(GsonConverterFactory.create(gson))
           .build()
     }
 
+    private fun getDB() : AppDatabase {
+        return Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java,
+            "pokemon-db"
+        ).build()
+    }
+
+    private val coroutineExceptionHandler = CoroutineExceptionHandler{ _, throwable ->
+        throwable.message?.let { Log.e("EXCEPTION HANDLER", it) }
+        throwable.printStackTrace()
+    }
+
     // Crea corutina para ejecutar la busqueda dentro de un hilo secundario
-    private fun searchPokemon(pokemonId: Int) {
+    private fun getPokemonList() {
         // La llamada a la API dentro del lauch queda en un hilo secundario
-        CoroutineScope(Dispatchers.IO).launch {
-            val call = getRetrofit().create(PokemonService::class.java).getPokemon(pokemonId)
-            val pokemon = call.body()
-            runOnUiThread{
-                if (call.isSuccessful){
-                    val newImage = pokemon?.sprites?.other?.officialArtwork?.frontDefault
-                    if (newImage != null) {
-                        pokemonImages.add(0, newImage)
-                    }
-                    // TODO("Poner imagen del Pokemon en algun lado")
+        CoroutineScope(Dispatchers.IO + coroutineExceptionHandler).launch {
+            val call = getRetrofit().create(PokemonService::class.java).getPokemonList()
+            val pokemonList = call.body()?.toEntityList()
+            if (call.isSuccessful) {
+                if (pokemonList != null) {
+                    getDB().pokemonDao().insertAll(pokemonList)
                 }
-                else{
+                runOnUiThread {
+                    showSuccess()
+                }
+            } else {
+                runOnUiThread {
                     showError()
                 }
             }
@@ -53,4 +74,18 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this,"No se encontró el Pokemon",Toast.LENGTH_SHORT).show()
     }
 
+    private fun showSuccess() {
+        Toast.makeText(this,"Se agregaron Los pokemons a DB",Toast.LENGTH_SHORT).show()
+    }
+
+}
+
+private fun PokemonList.toEntityList(): List<com.example.tp_mobile.db.PokemonFromList> {
+    return this.results.map {
+        com.example.tp_mobile.db.PokemonFromList(
+            it.url.split('/').dropLast(1).last().toInt(),
+            it.name,
+            it.url
+        )
+    }
 }

@@ -32,6 +32,12 @@ class WelcomeFragment : Fragment() {
             val action = WelcomeFragmentDirections.actionWelcomeFragmentToStatsFragment()
             findNavController().navigate(action)
         }
+
+
+        view.findViewById<Button>(R.id.help_button).setOnClickListener {
+            val action = WelcomeFragmentDirections.actionWelcomeFragmentToHelpFragment()
+            findNavController().navigate(action)
+        }
     }
 
     private fun showLevelPickerDialog(navigationAction: (String) -> Unit) {

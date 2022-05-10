@@ -22,8 +22,12 @@ data class OfficialArtwork (
     val frontDefault: String?
 )
 
+data class PokemonList(
+    val count: Int,
+    val results: List<PokemonFromList>
+)
+
 data class PokemonFromList(
-    val id: Int,
     val name: String,
     val url: String
 )

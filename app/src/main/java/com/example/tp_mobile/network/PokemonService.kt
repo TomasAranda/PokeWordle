@@ -6,9 +6,9 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface PokemonService {
-    @GET("/{id}")
+    @GET("pokemon/{id}")
     suspend fun getPokemon(@Path("id") pokemonId: Int) : Response<Pokemon>
 
-    @GET
-    suspend fun getPokemonList(@Query("limit") quantity: Int = 898) : Response<List<PokemonFromList>>
+    @GET("pokemon")
+    suspend fun getPokemonList(@Query("limit") quantity: Int = 898) : Response<PokemonList>
 }
