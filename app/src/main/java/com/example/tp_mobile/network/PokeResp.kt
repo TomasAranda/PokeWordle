@@ -1,4 +1,4 @@
-package com.example.tp_mobile
+package com.example.tp_mobile.network
 
 import com.google.gson.annotations.SerializedName
 
@@ -20,4 +20,10 @@ data class OtherSprites (
 data class OfficialArtwork (
     @SerializedName("front_default")
     val frontDefault: String?
+)
+
+data class PokemonFromList(
+    val id: Int,
+    val name: String,
+    val url: String
 )

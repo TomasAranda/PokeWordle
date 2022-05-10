@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.tp_mobile.databinding.ActivityMainBinding
+import com.example.tp_mobile.network.PokemonService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,10 +29,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Crea corutina para ejecutar la busqueda dentro de un hilo secundario
-    private fun searchFunc(query: String) {
+    private fun searchPokemon(pokemonId: Int) {
         // La llamada a la API dentro del lauch queda en un hilo secundario
         CoroutineScope(Dispatchers.IO).launch {
-            val call = getRetrofit().create(APIService::class.java).getPokemon(query)
+            val call = getRetrofit().create(PokemonService::class.java).getPokemon(pokemonId)
             val pokemon = call.body()
             runOnUiThread{
                 if (call.isSuccessful){
