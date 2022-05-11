@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.room.Room
 import com.example.tp_mobile.databinding.ActivityMainBinding
 import com.example.tp_mobile.db.AppDatabase
 import com.example.tp_mobile.network.PokemonList
@@ -19,7 +18,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val pokemonImages = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,14 +34,6 @@ class MainActivity : AppCompatActivity() {
           .build()
     }
 
-    private fun getDB() : AppDatabase {
-        return Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java,
-            "pokemon-db"
-        ).build()
-    }
-
     private val coroutineExceptionHandler = CoroutineExceptionHandler{ _, throwable ->
         throwable.message?.let { Log.e("EXCEPTION HANDLER", it) }
         throwable.printStackTrace()
@@ -57,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             val pokemonList = call.body()?.toEntityList()
             if (call.isSuccessful) {
                 if (pokemonList != null) {
-                    getDB().pokemonDao().insertAll(pokemonList)
+                    AppDatabase.getInstance(applicationContext).pokemonDao().insertAll(pokemonList)
                 }
                 runOnUiThread {
                     showSuccess()
@@ -71,7 +61,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showError() {
-        Toast.makeText(this,"No se encontró el Pokemon",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"Error al buscar pokemones",Toast.LENGTH_SHORT).show()
     }
 
     private fun showSuccess() {

@@ -17,6 +17,7 @@
         tools:text="Level" />
 
     <ImageView
+        android:id="@+id/pokemon_image_view"
         android:layout_width="300dp"
         android:layout_height="500dp"
         android:src="@drawable/poke_wordle_game"

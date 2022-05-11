@@ -5,9 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 
 class GameFragment : Fragment() {
@@ -25,6 +24,8 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<TextView>(R.id.difficulty_level).text = args.chosenGameLevel
+        val pokemonIV = view.findViewById<ImageView>(R.id.pokemon_image_view)
+        // TODO("Put pokemon image into pokemonIV")
     }
 
 }
