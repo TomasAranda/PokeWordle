@@ -5,9 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.fragment.navArgs
+import com.example.tp_mobile.network.PokemonService
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class GameFragment : Fragment() {
     private val args: GameFragmentArgs by navArgs()
@@ -23,9 +29,24 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<TextView>(R.id.difficulty_level).text = args.chosenGameLevel
         val pokemonIV = view.findViewById<ImageView>(R.id.pokemon_image_view)
-        // TODO("Put pokemon image into pokemonIV")
+        view.findViewById<TextView>(R.id.difficulty_level).text = args.chosenGameLevel
+        view.findViewById<Button>(R.id.hint_button).setOnClickListener {
+            getRandomPokemonImage(pokemonIV)
+        }
     }
 
+    private fun getRandomPokemonImage(pokemonIV: ImageView) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val call = PokemonService.create().getPokemon(args.randomPokemonId)
+            val pokemonImageUrl = call.body()?.sprites?.other?.officialArtwork?.frontDefault
+            if (call.isSuccessful) {
+                if (pokemonImageUrl != null) {
+                    activity?.runOnUiThread {
+                        Picasso.get().load(pokemonImageUrl).into(pokemonIV)
+                    }
+                }
+            }
+        }
+    }
 }

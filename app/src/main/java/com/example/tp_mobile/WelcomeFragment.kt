@@ -23,7 +23,7 @@ class WelcomeFragment : Fragment() {
 
         view.findViewById<Button>(R.id.play_button).setOnClickListener {
             showLevelPickerDialog {
-                val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment(it)
+                val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment(it, getRandomPokemonId())
                 findNavController().navigate(action)
             }
         }
@@ -43,6 +43,10 @@ class WelcomeFragment : Fragment() {
     private fun showLevelPickerDialog(navigationAction: (String) -> Unit) {
         val dialog  = LevelsDialogFragment(navigationAction)
         dialog.show(parentFragmentManager, "Select level")
+    }
+
+    private fun getRandomPokemonId() : Int {
+        return (1..898).random()
     }
 
 }

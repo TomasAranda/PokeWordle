@@ -40,6 +40,9 @@
         <argument
             android:name="chosenGameLevel"
             app:argType="string"/>
+        <argument
+            android:name="randomPokemonId"
+            app:argType="integer"/>
     </fragment>
     <fragment
         android:id="@+id/statsFragment"

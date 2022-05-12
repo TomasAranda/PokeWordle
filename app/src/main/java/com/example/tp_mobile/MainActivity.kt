@@ -8,13 +8,10 @@ import com.example.tp_mobile.databinding.ActivityMainBinding
 import com.example.tp_mobile.db.AppDatabase
 import com.example.tp_mobile.network.PokemonList
 import com.example.tp_mobile.network.PokemonService
-import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -26,15 +23,8 @@ class MainActivity : AppCompatActivity() {
         getPokemonList()
     }
 
-     private fun getRetrofit(): Retrofit {
-         val gson = GsonBuilder().setLenient().create()
-         return Retrofit.Builder()
-          .baseUrl("https://pokeapi.co/api/v2/")
-          .addConverterFactory(GsonConverterFactory.create(gson))
-          .build()
-    }
-
     private val coroutineExceptionHandler = CoroutineExceptionHandler{ _, throwable ->
+        Log.e("EXCEPTION HANDLER", throwable.cause.toString())
         throwable.message?.let { Log.e("EXCEPTION HANDLER", it) }
         throwable.printStackTrace()
     }
@@ -43,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private fun getPokemonList() {
         // La llamada a la API dentro del lauch queda en un hilo secundario
         CoroutineScope(Dispatchers.IO + coroutineExceptionHandler).launch {
-            val call = getRetrofit().create(PokemonService::class.java).getPokemonList()
+            val call = PokemonService.create().getPokemonList()
             val pokemonList = call.body()?.toEntityList()
             if (call.isSuccessful) {
                 if (pokemonList != null) {
