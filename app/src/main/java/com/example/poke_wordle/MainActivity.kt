@@ -1,13 +1,14 @@
-package com.example.tp_mobile
+package com.example.poke_wordle
 
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.tp_mobile.databinding.ActivityMainBinding
-import com.example.tp_mobile.db.AppDatabase
-import com.example.tp_mobile.network.PokemonList
-import com.example.tp_mobile.network.PokemonService
+import com.example.poke_wordle.databinding.ActivityMainBinding
+import com.example.poke_wordle.db.AppDatabase
+import com.example.poke_wordle.db.Pokemon
+import com.example.poke_wordle.network.PokemonList
+import com.example.poke_wordle.network.PokemonService
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +21,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        getPokemonList()
+        // TODO("SEED DB ONCREATE ROOM")
+        // getPokemonList()
     }
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler{ _, throwable ->
@@ -29,9 +31,7 @@ class MainActivity : AppCompatActivity() {
         throwable.printStackTrace()
     }
 
-    // Crea corutina para ejecutar la busqueda dentro de un hilo secundario
     private fun getPokemonList() {
-        // La llamada a la API dentro del lauch queda en un hilo secundario
         CoroutineScope(Dispatchers.IO + coroutineExceptionHandler).launch {
             val call = PokemonService.create().getPokemonList()
             val pokemonList = call.body()?.toEntityList()
@@ -60,9 +60,9 @@ class MainActivity : AppCompatActivity() {
 
 }
 
-private fun PokemonList.toEntityList(): List<com.example.tp_mobile.db.PokemonFromList> {
+private fun PokemonList.toEntityList(): List<Pokemon> {
     return this.results.map {
-        com.example.tp_mobile.db.PokemonFromList(
+        Pokemon(
             it.url.split('/').dropLast(1).last().toInt(),
             it.name,
             it.url

@@ -1,11 +1,21 @@
-package com.example.tp_mobile.network
+package com.example.poke_wordle.network
 
 import com.google.gson.annotations.SerializedName
 
 data class Pokemon(
     val id: Int,
     val name: String,
-    val sprites: PokemonSprites
+    val sprites: PokemonSprites,
+    val types: List<PokemonType>,
+)
+
+data class PokemonType (
+    val slot: Int,
+    val type: Type
+)
+
+data class Type (
+    val name: String
 )
 
 data class PokemonSprites(

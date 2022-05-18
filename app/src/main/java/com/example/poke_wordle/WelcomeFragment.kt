@@ -1,4 +1,4 @@
-package com.example.tp_mobile
+package com.example.poke_wordle
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
+import com.example.poke_wordle.db.AppDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class WelcomeFragment : Fragment() {
 
@@ -23,7 +27,8 @@ class WelcomeFragment : Fragment() {
 
         view.findViewById<Button>(R.id.play_button).setOnClickListener {
             showLevelPickerDialog {
-                val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment(it, getRandomPokemonId())
+                val pokemonId = getRandomPokemonId()
+                val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment(it, pokemonId)
                 findNavController().navigate(action)
             }
         }
@@ -46,7 +51,15 @@ class WelcomeFragment : Fragment() {
     }
 
     private fun getRandomPokemonId() : Int {
-        return (1..898).random()
+        var randomPokemonId = 0
+        CoroutineScope(Dispatchers.IO).launch {
+            val db = context?.let { AppDatabase.getInstance(it) }
+            val pokemon = db?.pokemonDao()?.getRandomPokemonFromList()
+            if (pokemon != null) {
+                randomPokemonId = pokemon.id
+            }
+        }
+        return randomPokemonId
     }
 
 }

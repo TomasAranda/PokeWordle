@@ -1,4 +1,4 @@
-package com.example.tp_mobile
+package com.example.poke_wordle
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,7 +9,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.fragment.navArgs
-import com.example.tp_mobile.network.PokemonService
+import com.example.poke_wordle.network.PokemonService
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

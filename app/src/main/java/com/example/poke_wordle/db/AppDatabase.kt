@@ -1,16 +1,19 @@
-package com.example.tp_mobile.db
+package com.example.poke_wordle.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
 @Database(
     version = 1,
-    entities = [Pokemon::class, PokemonFromList::class]
+    entities = [Pokemon::class, PokeWordlePlay::class]
 )
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun pokemonDao(): PokemonDao
+    abstract fun pokeWordlePlayDao(): PokeWordlePlayDao
 
     companion object {
         // For Singleton instantiation

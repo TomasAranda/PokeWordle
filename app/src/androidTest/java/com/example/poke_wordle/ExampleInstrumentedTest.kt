@@ -1,4 +1,4 @@
-package com.example.tp_mobile
+package com.example.poke_wordle
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
