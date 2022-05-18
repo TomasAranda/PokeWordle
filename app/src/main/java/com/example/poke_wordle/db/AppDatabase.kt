@@ -5,6 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import com.example.poke_wordle.workers.SeedDatabaseWorker
 
 @Database(
     version = 1,
@@ -26,7 +30,18 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context): AppDatabase {
-            return Room.databaseBuilder(context, AppDatabase::class.java, "poke-wordle-db").build()
+            return Room.databaseBuilder(context, AppDatabase::class.java, "poke-wordle-db")
+                .addCallback(
+                    object : RoomDatabase.Callback() {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            super.onCreate(db)
+                            val request = OneTimeWorkRequestBuilder<SeedDatabaseWorker>()
+                                .build()
+                            WorkManager.getInstance(context).enqueue(request)
+                        }
+                    }
+                )
+                .build()
         }
     }
 }
