@@ -1,15 +1,16 @@
 package com.example.poke_wordle
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.example.poke_wordle.network.PokemonService
+import com.example.poke_wordle.picasso.transformations.MaskTransformation
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +44,10 @@ class GameFragment : Fragment() {
             if (call.isSuccessful) {
                 if (pokemonImageUrl != null) {
                     activity?.runOnUiThread {
-                        Picasso.get().load(pokemonImageUrl).into(pokemonIV)
+                        Picasso.get()
+                            .load(pokemonImageUrl)
+                            .transform(MaskTransformation(requireContext(), R.color.black))
+                            .into(pokemonIV)
                     }
                 }
             }
