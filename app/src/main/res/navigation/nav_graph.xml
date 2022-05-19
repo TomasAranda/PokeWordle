@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="com.example.tp_mobile.WelcomeFragment"
+        android:name="com.example.poke_wordle.WelcomeFragment"
         android:label="fragment_welcome"
         tools:layout="@layout/fragment_welcome" >
         <action
@@ -24,31 +24,34 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
-    </fragment>
-    <fragment
-        android:id="@+id/gameFragment"
-        android:name="com.example.tp_mobile.GameFragment"
-        android:label="fragment_game"
-        tools:layout="@layout/fragment_game" >
         <action
-            android:id="@+id/action_gameFragment_to_helpFragment"
+            android:id="@+id/action_welcomeFragment_to_helpFragment"
             app:destination="@id/helpFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="com.example.poke_wordle.GameFragment"
+        android:label="fragment_game"
+        tools:layout="@layout/fragment_game" >
         <argument
             android:name="chosenGameLevel"
             app:argType="string"/>
+        <argument
+            android:name="randomPokemonId"
+            app:argType="integer"/>
     </fragment>
     <fragment
         android:id="@+id/statsFragment"
-        android:name="com.example.tp_mobile.StatsFragment"
+        android:name="com.example.poke_wordle.StatsFragment"
         android:label="fragment_stats"
         tools:layout="@layout/fragment_stats" />
     <fragment
         android:id="@+id/helpFragment"
-        android:name="com.example.tp_mobile.HelpFragment"
+        android:name="com.example.poke_wordle.HelpFragment"
         android:label="fragment_help"
         tools:layout="@layout/fragment_help" />
 </navigation>

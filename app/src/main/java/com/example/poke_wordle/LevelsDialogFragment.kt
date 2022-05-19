@@ -1,4 +1,4 @@
-package com.example.tp_mobile
+package com.example.poke_wordle
 
 import android.app.Dialog
 import android.os.Bundle
