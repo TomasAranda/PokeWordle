@@ -18,8 +18,8 @@
 
     <ImageView
         android:id="@+id/pokemon_image_view"
-        android:layout_width="300dp"
-        android:layout_height="500dp"
+        android:layout_width="200dp"
+        android:layout_height="300dp"
         android:src="@drawable/poke_wordle_game"
         android:layout_marginBottom="20dp"
         android:contentDescription="@string/game_image_content_description" />

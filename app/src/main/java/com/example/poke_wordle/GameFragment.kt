@@ -30,11 +30,17 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val pokemonIV = view.findViewById<ImageView>(R.id.pokemon_image_view)
         view.findViewById<TextView>(R.id.difficulty_level).text = args.chosenGameLevel
         view.findViewById<Button>(R.id.hint_button).setOnClickListener {
-            getRandomPokemonImage(pokemonIV)
+            showHintImageDialog {
+                getRandomPokemonImage(it)
+            }
         }
+    }
+
+    private fun showHintImageDialog(setImage: (ImageView) -> Unit) {
+        val dialog = PokemonImageHintDialog(setImage)
+        dialog.show(parentFragmentManager, "Pokemon Image Hint")
     }
 
     private fun getRandomPokemonImage(pokemonIV: ImageView) {
@@ -46,6 +52,7 @@ class GameFragment : Fragment() {
                     activity?.runOnUiThread {
                         Picasso.get()
                             .load(pokemonImageUrl)
+                            .resize(1000, 1000)
                             .transform(MaskTransformation(requireContext(), R.color.black))
                             .into(pokemonIV)
                     }
