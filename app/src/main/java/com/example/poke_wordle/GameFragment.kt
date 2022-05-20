@@ -5,16 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import com.example.poke_wordle.network.PokemonService
-import com.example.poke_wordle.picasso.transformations.MaskTransformation
-import com.squareup.picasso.Picasso
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class GameFragment : Fragment() {
     private val args: GameFragmentArgs by navArgs()
@@ -30,34 +23,20 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val levelsArray = resources.getStringArray(R.array.levels)
         view.findViewById<TextView>(R.id.difficulty_level).text = args.chosenGameLevel
         view.findViewById<Button>(R.id.hint_button).setOnClickListener {
-            showHintImageDialog {
-                getRandomPokemonImage(it)
+            when (args.chosenGameLevel) {
+                levelsArray[0] -> showHintImageDialog(false, args.randomPokemonId)// Fácil
+                levelsArray[1] -> showHintImageDialog(true, args.randomPokemonId) // Intermedio
+                else -> {} // Difícil
             }
         }
     }
 
-    private fun showHintImageDialog(setImage: (ImageView) -> Unit) {
-        val dialog = PokemonImageHintDialog(setImage)
+    private fun showHintImageDialog(showsPokemonType: Boolean, pokemonId: Int) {
+        val dialog = PokemonImageHintDialog(showsPokemonType, pokemonId)
         dialog.show(parentFragmentManager, "Pokemon Image Hint")
     }
 
-    private fun getRandomPokemonImage(pokemonIV: ImageView) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val call = PokemonService.create().getPokemon(args.randomPokemonId)
-            val pokemonImageUrl = call.body()?.sprites?.other?.officialArtwork?.frontDefault
-            if (call.isSuccessful) {
-                if (pokemonImageUrl != null) {
-                    activity?.runOnUiThread {
-                        Picasso.get()
-                            .load(pokemonImageUrl)
-                            .resize(1000, 1000)
-                            .transform(MaskTransformation(requireContext(), R.color.black))
-                            .into(pokemonIV)
-                    }
-                }
-            }
-        }
-    }
 }
