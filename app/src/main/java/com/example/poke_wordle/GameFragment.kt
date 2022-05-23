@@ -37,6 +37,7 @@ class GameFragment : Fragment() {
     private fun showHintImageDialog(showsPokemonType: Boolean, pokemonId: Int) {
         val dialog = PokemonImageHintDialog(showsPokemonType, pokemonId)
         dialog.show(parentFragmentManager, "Pokemon Image Hint")
+        view?.findViewById<Button>(R.id.hint_button)?.visibility = View.GONE
     }
 
 }
