@@ -25,13 +25,18 @@ class GameFragment : Fragment() {
 
         val levelsArray = resources.getStringArray(R.array.levels)
         view.findViewById<TextView>(R.id.difficulty_level).text = args.chosenGameLevel
-        view.findViewById<Button>(R.id.hint_button).setOnClickListener {
-            when (args.chosenGameLevel) {
-                levelsArray[0] -> showHintImageDialog(false, args.randomPokemonId)// Fácil
-                levelsArray[1] -> showHintImageDialog(true, args.randomPokemonId) // Intermedio
-                else -> {} // Difícil
+        val hintButtonView = view.findViewById<Button>(R.id.hint_button)
+        if (args.chosenGameLevel == levelsArray[2]) { // Difícil
+            hintButtonView.visibility = View.GONE
+        } else {
+            hintButtonView.setOnClickListener {
+                when (args.chosenGameLevel) {
+                    levelsArray[0] -> showHintImageDialog(false, args.randomPokemonId)// Fácil
+                    levelsArray[1] -> showHintImageDialog(true, args.randomPokemonId) // Intermedio
+                }
             }
         }
+
     }
 
     private fun showHintImageDialog(showsPokemonType: Boolean, pokemonId: Int) {
