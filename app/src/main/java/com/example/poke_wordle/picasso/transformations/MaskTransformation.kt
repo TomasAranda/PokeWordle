@@ -10,7 +10,7 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import com.squareup.picasso.Transformation
 
-
+// TODO("MANDAR A CARPETA UTIL")
 class MaskTransformation(context: Context, maskId: Int) : Transformation {
     private val mContext: Context
     private val mMaskId: Int

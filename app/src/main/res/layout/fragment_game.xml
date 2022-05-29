@@ -24,7 +24,6 @@
         android:layout_marginBottom="20dp"
         android:contentDescription="@string/game_image_content_description" />
 
-
     <Button
         android:id="@+id/hint_button"
         android:layout_width="200dp"

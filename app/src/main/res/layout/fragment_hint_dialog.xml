@@ -6,18 +6,45 @@
     android:layout_gravity="center"
     android:gravity="center">
 
-    <ImageView
-        android:id="@+id/primary_type"
-        android:layout_height="150dp"
+    <RelativeLayout
+        android:id="@+id/primary_image"
+        android:layout_marginVertical="10dp"
         android:layout_width="150dp"
-        android:contentDescription="@string/primary_type_of_the_pokemon"
-        android:layout_marginVertical="10dp"/>
+        android:layout_height="150dp">
 
-    <ImageView
-        android:id="@+id/secondary_type"
+        <ImageView
+            android:id="@+id/primary_image_iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:contentDescription="@string/primary_type_of_the_pokemon" />
+
+        <ProgressBar
+            android:id="@+id/primary_image_pb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="visible"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/secondary_image"
+        android:layout_marginVertical="10dp"
         android:visibility="gone"
-        android:layout_height="150dp"
-        android:layout_width="150dp"
-        android:contentDescription="@string/secondary_type_of_the_pokemon"
-        android:layout_marginVertical="10dp"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/secondary_image_iv"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:contentDescription="@string/secondary_type_of_the_pokemon" />
+
+        <ProgressBar
+            android:id="@+id/secondary_image_pb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="visible"/>
+    </RelativeLayout>
 </LinearLayout>
