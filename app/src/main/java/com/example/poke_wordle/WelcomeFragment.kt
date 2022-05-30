@@ -13,12 +13,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class WelcomeFragment : Fragment() {
+    private var pokemonOfTheDayId: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        getRandomPokemonId()
         return inflater.inflate(R.layout.fragment_welcome, container, false)
     }
 
@@ -27,8 +28,7 @@ class WelcomeFragment : Fragment() {
 
         view.findViewById<Button>(R.id.play_button).setOnClickListener {
             showLevelPickerDialog {
-                val pokemonId = getRandomPokemonId()
-                val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment(it, pokemonId)
+                val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment(it, pokemonOfTheDayId)
                 findNavController().navigate(action)
             }
         }
@@ -50,16 +50,14 @@ class WelcomeFragment : Fragment() {
         dialog.show(parentFragmentManager, "Select level")
     }
 
-    private fun getRandomPokemonId() : Int {
-        var randomPokemonId = 0
+    private fun getRandomPokemonId() {
         CoroutineScope(Dispatchers.IO).launch {
             val db = context?.let { AppDatabase.getInstance(it) }
             val pokemon = db?.pokemonDao()?.getRandomPokemonFromList()
             if (pokemon != null) {
-                randomPokemonId = pokemon.id
+                pokemonOfTheDayId = pokemon.id
             }
         }
-        return randomPokemonId
     }
 
 }

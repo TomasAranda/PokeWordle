@@ -9,4 +9,6 @@
     <string name="help_image_content_description">Help example view</string>
     <string name="pick_level">Elegí el nivel</string>
     <string name="show_hint">Show Hint</string>
+    <string name="primary_type_of_the_pokemon">Primary type of the Pokemon</string>
+    <string name="secondary_type_of_the_pokemon">Secondary type of the Pokemon</string>
 </resources>
