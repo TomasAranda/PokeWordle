@@ -9,7 +9,7 @@ import android.widget.RelativeLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.example.poke_wordle.network.PokemonService
-import com.example.poke_wordle.picasso.transformations.MaskTransformation
+import com.example.poke_wordle.util.MaskTransformation
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -19,10 +19,11 @@ import java.lang.Exception
 
 class PokemonImageHintDialog(private val showsPokemonType: Boolean, private val pokemonId: Int) : DialogFragment() {
 
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
+            // TODO("Agregar ViewBinding")
+            // val binding = FragmentHintDialogBinding.inflate(layoutInflater)
             val dialogView = layoutInflater.inflate(R.layout.fragment_hint_dialog, null)
             if (showsPokemonType) {
                 builder.setTitle("El Pokemon es de este tipo:")
