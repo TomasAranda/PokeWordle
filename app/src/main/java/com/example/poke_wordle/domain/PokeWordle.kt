@@ -1,5 +1,6 @@
 package com.example.poke_wordle.domain
 
-class PokeWordle {
-    // TODO("Agregar estado para las letras de Wordle, palabra solucion y estado del teclado")
-}
+data class PokeWordle (
+    val solutionWord: String,
+    var attempts: List<MutableList<Char>> = List(6) { MutableList(solutionWord.length) { ' ' } }
+)
