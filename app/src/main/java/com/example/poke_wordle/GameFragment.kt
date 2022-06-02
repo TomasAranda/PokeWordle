@@ -1,19 +1,13 @@
 package com.example.poke_wordle
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import com.example.poke_wordle.network.PokemonService
-import com.squareup.picasso.Picasso
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class GameFragment : Fragment() {
     private val args: GameFragmentArgs by navArgs()
@@ -29,24 +23,26 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val pokemonIV = view.findViewById<ImageView>(R.id.pokemon_image_view)
+        val levelsArray = resources.getStringArray(R.array.levels)
         view.findViewById<TextView>(R.id.difficulty_level).text = args.chosenGameLevel
-        view.findViewById<Button>(R.id.hint_button).setOnClickListener {
-            getRandomPokemonImage(pokemonIV)
-        }
-    }
-
-    private fun getRandomPokemonImage(pokemonIV: ImageView) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val call = PokemonService.create().getPokemon(args.randomPokemonId)
-            val pokemonImageUrl = call.body()?.sprites?.other?.officialArtwork?.frontDefault
-            if (call.isSuccessful) {
-                if (pokemonImageUrl != null) {
-                    activity?.runOnUiThread {
-                        Picasso.get().load(pokemonImageUrl).into(pokemonIV)
-                    }
+        val hintButtonView = view.findViewById<Button>(R.id.hint_button)
+        if (args.chosenGameLevel == levelsArray[2]) { // Difícil
+            hintButtonView.visibility = View.GONE
+        } else {
+            hintButtonView.setOnClickListener {
+                when (args.chosenGameLevel) {
+                    levelsArray[0] -> showHintImageDialog(false, args.randomPokemonId)// Fácil
+                    levelsArray[1] -> showHintImageDialog(true, args.randomPokemonId) // Intermedio
                 }
             }
         }
+
     }
+
+    private fun showHintImageDialog(showsPokemonType: Boolean, pokemonId: Int) {
+        val dialog = PokemonImageHintDialog(showsPokemonType, pokemonId)
+        dialog.show(parentFragmentManager, "Pokemon Image Hint")
+        view?.findViewById<Button>(R.id.hint_button)?.visibility = View.GONE
+    }
+
 }
