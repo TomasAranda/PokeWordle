@@ -3,15 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="@drawable/disenio_juego_limpia"
     android:gravity="center"
-    tools:context=".StatsFragment">
-
-    <ImageView
-        android:layout_width="300dp"
-        android:layout_height="500dp"
-        android:src="@drawable/poke_wordle_stats"
-        android:layout_marginBottom="30dp"
-        android:contentDescription="@string/stats_image_content_description" />
-
-</LinearLayout>
+    android:orientation="vertical"
+    tools:context=".StatsFragment" />
