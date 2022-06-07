@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.poke_wordle.db.AppDatabase
-import com.example.poke_wordle.db.Pokemon
+import com.example.poke_wordle.db.model.PokemonEntity
 import com.example.poke_wordle.network.PokemonList
 import com.example.poke_wordle.network.PokemonService
 import kotlinx.coroutines.Dispatchers
@@ -36,9 +36,9 @@ class SeedDatabaseWorker(
     }
 }
 
-private fun PokemonList.toEntityList(): List<Pokemon> {
+private fun PokemonList.toEntityList(): List<PokemonEntity> {
     return this.results.map {
-        Pokemon(
+        PokemonEntity(
             it.url.split('/').dropLast(1).last().toInt(),
             it.name,
             it.url

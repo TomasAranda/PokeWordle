@@ -19,7 +19,6 @@ class WelcomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        getRandomPokemonId()
         return inflater.inflate(R.layout.fragment_welcome, container, false)
     }
 
@@ -46,18 +45,8 @@ class WelcomeFragment : Fragment() {
     }
 
     private fun showLevelPickerDialog(navigationAction: (String) -> Unit) {
-        val dialog  = LevelsDialogFragment(navigationAction)
+        val dialog  = LevelsPickerDialogFragment(navigationAction)
         dialog.show(parentFragmentManager, "Select level")
-    }
-
-    private fun getRandomPokemonId() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val db = context?.let { AppDatabase.getInstance(it) }
-            val pokemon = db?.pokemonDao()?.getRandomPokemonFromList()
-            if (pokemon != null) {
-                pokemonOfTheDayId = pokemon.id
-            }
-        }
     }
 
 }

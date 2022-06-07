@@ -39,8 +39,8 @@ class PokemonImageHintDialog(private val showsPokemonType: Boolean, private val 
 
     private fun loadPokemonImage(dialogView: View) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call = PokemonService.create().getPokemon(pokemonId)
-            val pokemonImageUrl = call.body()?.sprites?.other?.officialArtwork?.frontDefault
+            val pokemon = PokemonService.create().getPokemon(pokemonId)
+            val pokemonImageUrl = pokemon.sprites.other?.officialArtwork?.frontDefault
             if (pokemonImageUrl != null) {
                 val primaryView = dialogView.findViewById<RelativeLayout>(R.id.primary_image)
                 val primaryIV = dialogView.findViewById<ImageView>(R.id.primary_image_iv)
@@ -70,37 +70,23 @@ class PokemonImageHintDialog(private val showsPokemonType: Boolean, private val 
 
     private fun loadPokemonTypeImage(dialogView: View) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call = PokemonService.create().getPokemon(pokemonId)
-            val types = call.body()?.types
-            if (types != null) {
-                val primaryIV = dialogView.findViewById<ImageView>(R.id.primary_image_iv)
-                val primaryProgressBar = dialogView.findViewById<ProgressBar>(R.id.primary_image_pb)
-                if (types.size > 1) {
-                    val secondaryView = dialogView.findViewById<RelativeLayout>(R.id.secondary_image)
-                    val secondaryIV = dialogView.findViewById<ImageView>(R.id.secondary_image_iv)
-                    val secondaryProgressBar = dialogView.findViewById<ProgressBar>(R.id.secondary_image_pb)
+            val pokemon = PokemonService.create().getPokemon(pokemonId)
+            val types = pokemon.types
 
-                    activity?.runOnUiThread {
-                        secondaryView.visibility = View.VISIBLE
-                        Picasso.get()
-                            .load(getPokemonTypeIconResource(types[1].type.name))
-                            .into(secondaryIV, object: Callback {
-                                override fun onSuccess() {
-                                    secondaryProgressBar.visibility = View.GONE
-                                }
+            val primaryIV = dialogView.findViewById<ImageView>(R.id.primary_image_iv)
+            val primaryProgressBar = dialogView.findViewById<ProgressBar>(R.id.primary_image_pb)
+            if (types.size > 1) {
+                val secondaryView = dialogView.findViewById<RelativeLayout>(R.id.secondary_image)
+                val secondaryIV = dialogView.findViewById<ImageView>(R.id.secondary_image_iv)
+                val secondaryProgressBar = dialogView.findViewById<ProgressBar>(R.id.secondary_image_pb)
 
-                                override fun onError(e: Exception?) {
-                                    TODO("Not yet implemented")
-                                }
-                            })
-                    }
-                }
                 activity?.runOnUiThread {
+                    secondaryView.visibility = View.VISIBLE
                     Picasso.get()
-                        .load(getPokemonTypeIconResource(types[0].type.name))
-                        .into(primaryIV, object: Callback {
+                        .load(getPokemonTypeIconResource(types[1].type.name))
+                        .into(secondaryIV, object: Callback {
                             override fun onSuccess() {
-                                primaryProgressBar.visibility = View.GONE
+                                secondaryProgressBar.visibility = View.GONE
                             }
 
                             override fun onError(e: Exception?) {
@@ -108,6 +94,19 @@ class PokemonImageHintDialog(private val showsPokemonType: Boolean, private val 
                             }
                         })
                 }
+            }
+            activity?.runOnUiThread {
+                Picasso.get()
+                    .load(getPokemonTypeIconResource(types[0].type.name))
+                    .into(primaryIV, object: Callback {
+                        override fun onSuccess() {
+                            primaryProgressBar.visibility = View.GONE
+                        }
+
+                        override fun onError(e: Exception?) {
+                            TODO("Not yet implemented")
+                        }
+                    })
             }
         }
     }

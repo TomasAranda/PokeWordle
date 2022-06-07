@@ -1,8 +1,9 @@
 package com.example.poke_wordle.network
 
+import com.example.poke_wordle.domain.Pokemon
 import com.google.gson.annotations.SerializedName
 
-data class Pokemon(
+data class PokemonDto(
     val id: Int,
     val name: String,
     val sprites: PokemonSprites,
@@ -29,7 +30,7 @@ data class OtherSprites (
 
 data class OfficialArtwork (
     @SerializedName("front_default")
-    val frontDefault: String?
+    val frontDefault: String
 )
 
 data class PokemonList(
@@ -41,3 +42,11 @@ data class PokemonFromList(
     val name: String,
     val url: String
 )
+
+internal fun PokemonDto.toDomainModel() =
+    Pokemon(
+        this.id,
+        this.name,
+        this.sprites.other?.officialArtwork?.frontDefault ?: "",
+        this.types.map { it.type.name }
+    )

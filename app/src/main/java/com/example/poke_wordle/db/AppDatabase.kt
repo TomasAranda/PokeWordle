@@ -8,11 +8,13 @@ import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.example.poke_wordle.db.model.PokeWordlePlayEntity
+import com.example.poke_wordle.db.model.PokemonEntity
 import com.example.poke_wordle.workers.SeedDatabaseWorker
 
 @Database(
     version = 1,
-    entities = [Pokemon::class, PokeWordlePlay::class]
+    entities = [PokemonEntity::class, PokeWordlePlayEntity::class]
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
