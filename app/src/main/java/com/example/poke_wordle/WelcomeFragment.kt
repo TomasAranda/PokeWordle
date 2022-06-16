@@ -11,9 +11,10 @@ import com.example.poke_wordle.db.AppDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class WelcomeFragment : Fragment() {
-    private var pokemonOfTheDayId: Int = 0
+    private var pokemonOfTheDayId: Int = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,10 +26,27 @@ class WelcomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        view.findViewById<CustomButtonView>(R.id.wordle_letter_button).setOnClickListener {
+            (it as CustomButtonView).letterState = LetterState.CORRECT
+        }
+
         view.findViewById<Button>(R.id.play_button).setOnClickListener {
-            showLevelPickerDialog {
-                val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment(it, pokemonOfTheDayId)
-                findNavController().navigate(action)
+            CoroutineScope(Dispatchers.IO).launch {
+                // TODO("Move this logic to ViewModel [CHECK IF THERE IS CURRENT WORDLEPLAY ON DB]")
+                if (AppDatabase.getInstance(requireContext()).pokeWordlePlayDao().getWordlePlay(
+                        LocalDate.now()) != null) {
+                    activity?.runOnUiThread {
+                        val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment("Facil", pokemonOfTheDayId)
+                        findNavController().navigate(action)
+                    }
+                } else {
+                    activity?.runOnUiThread {
+                        showLevelPickerDialog {
+                            val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment(it, pokemonOfTheDayId)
+                            findNavController().navigate(action)
+                        }
+                    }
+                }
             }
         }
 

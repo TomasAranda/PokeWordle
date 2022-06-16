@@ -8,18 +8,18 @@ import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.example.poke_wordle.db.model.PokeWordlePlayEntity
 import com.example.poke_wordle.db.model.PokemonEntity
+import com.example.poke_wordle.db.model.WordlePlayEntity
 import com.example.poke_wordle.workers.SeedDatabaseWorker
 
 @Database(
     version = 1,
-    entities = [PokemonEntity::class, PokeWordlePlayEntity::class]
+    entities = [PokemonEntity::class, WordlePlayEntity::class]
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun pokemonDao(): PokemonDao
-    abstract fun pokeWordlePlayDao(): PokeWordlePlayDao
+    abstract fun pokeWordlePlayDao(): WordlePlayDao
 
     companion object {
         // For Singleton instantiation

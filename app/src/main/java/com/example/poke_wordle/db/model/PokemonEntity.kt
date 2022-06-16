@@ -13,9 +13,11 @@ data class PokemonEntity(
     val url: String
 )
 
-internal fun PokemonEntity.toDomainModel() = Pokemon(
-    this.id,
-    this.name,
-    this.url,
-    listOf()
-)
+internal fun PokemonEntity.toDomainModel(): Pokemon {
+    return Pokemon(
+        this.id,
+        this.name,
+        this.url,
+        List(2) {""}
+    )
+}

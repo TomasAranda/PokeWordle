@@ -10,9 +10,6 @@ import com.example.poke_wordle.db.model.PokemonEntity
 
 @Dao
 interface PokemonDao {
-//    @Query("SELECT * FROM `pokemon` WHERE id = :pokemonId")
-//    fun getPokemonFromList(pokemonId: Int): Pokemon?
-
     @Query("SELECT * FROM `pokemon` ORDER BY RANDOM() LIMIT 1")
     suspend fun getRandomPokemonFromList(): PokemonEntity
 
