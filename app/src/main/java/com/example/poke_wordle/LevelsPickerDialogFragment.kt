@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
 import com.example.poke_wordle.db.AppDatabase
 import com.example.poke_wordle.network.PokemonService
 import com.example.poke_wordle.repository.PokeWordlePlayRepository
@@ -24,7 +23,6 @@ class LevelsPickerDialogFragment(val onSelect: (String) -> Unit) : DialogFragmen
         val pokeWordlePlayDao = context?.let { AppDatabase.getInstance(it).pokeWordlePlayDao() }
         val pokeWordlePlayRepository = PokeWordlePlayRepository(pokeWordlePlayDao!!)
 
-        // Lastly, create an instance of LoginViewModel with userRepository
         levelPickerViewModel = LevelPickerViewModel(pokemonRepository, pokeWordlePlayRepository)
     }
 

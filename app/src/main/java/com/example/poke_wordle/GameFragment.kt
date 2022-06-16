@@ -5,18 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.example.poke_wordle.databinding.FragmentGameBinding
+import com.example.poke_wordle.db.AppDatabase
+import com.example.poke_wordle.network.PokemonService
+import com.example.poke_wordle.repository.PokeWordlePlayRepository
+import com.example.poke_wordle.repository.PokemonRepository
 import com.example.poke_wordle.viewmodel.PokeWordleViewModel
 
 class GameFragment : Fragment() {
     private lateinit var binding: FragmentGameBinding
-    private val wordleViewModel: PokeWordleViewModel by viewModels()
+    private lateinit var wordleViewModel: PokeWordleViewModel
     private val args: GameFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        wordleViewModel = PokeWordleViewModel(
+            PokemonRepository(PokemonService.create(), AppDatabase.getInstance(requireContext()).pokemonDao()),
+            PokeWordlePlayRepository(AppDatabase.getInstance(requireContext()).pokeWordlePlayDao())
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,8 +54,8 @@ class GameFragment : Fragment() {
         } else {
             binding.hintButton.setOnClickListener {
                 when (args.chosenGameLevel) {
-                    levelsArray[0] -> showHintImageDialog(false, args.randomPokemonId)// Fácil
-                    levelsArray[1] -> showHintImageDialog(true, args.randomPokemonId) // Intermedio
+                    levelsArray[0] -> showHintImageDialog(false)// Fácil
+                    levelsArray[1] -> showHintImageDialog(true) // Intermedio
                 }
             }
         }
@@ -54,8 +63,8 @@ class GameFragment : Fragment() {
         return binding.root
     }
 
-    private fun showHintImageDialog(showsPokemonType: Boolean, pokemonId: Int) {
-        val dialog = PokemonImageHintDialog(showsPokemonType, pokemonId)
+    private fun showHintImageDialog(showsPokemonType: Boolean) {
+        val dialog = PokemonImageHintDialog(showsPokemonType, wordleViewModel.pokemon.value!!)
         dialog.show(parentFragmentManager, "Pokemon Image Hint")
         view?.findViewById<Button>(R.id.hint_button)?.visibility = View.GONE
     }

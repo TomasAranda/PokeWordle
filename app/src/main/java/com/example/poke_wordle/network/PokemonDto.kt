@@ -47,6 +47,6 @@ internal fun PokemonDto.toDomainModel() =
     Pokemon(
         this.id,
         this.name,
-        this.sprites.other?.officialArtwork?.frontDefault ?: "",
+        this.sprites.other?.officialArtwork?.frontDefault!!,
         this.types.map { it.type.name }
     )
