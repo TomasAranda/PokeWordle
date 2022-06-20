@@ -5,42 +5,69 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import com.example.poke_wordle.databinding.FragmentGameBinding
+import com.example.poke_wordle.db.AppDatabase
+import com.example.poke_wordle.network.PokemonService
+import com.example.poke_wordle.repository.PokeWordlePlayRepository
+import com.example.poke_wordle.repository.PokemonRepository
+import com.example.poke_wordle.viewmodel.PokeWordleViewModel
 
 class GameFragment : Fragment() {
+    private lateinit var binding: FragmentGameBinding
+    private lateinit var wordleViewModel: PokeWordleViewModel
     private val args: GameFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val db = AppDatabase.getInstance(requireContext())
+        val pokemonDao = db.pokemonDao()
+        val pokeWordlePlayDao = db.pokeWordlePlayDao()
+        val service = PokemonService.create()
+        val pokemonRepository = PokemonRepository(service, pokemonDao)
+        val pokeWordlePlayRepository = PokeWordlePlayRepository(pokeWordlePlayDao)
+        wordleViewModel = PokeWordleViewModel(pokemonRepository, pokeWordlePlayRepository)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_game, container, false)
-    }
+    ): View {
+        binding = FragmentGameBinding.inflate(inflater)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        wordleViewModel.wordle.observe(viewLifecycleOwner) {
+            if (it != null) {
+                binding.attempts.text = it.attempts.toString()
+            }
+        }
+
+        binding.attempts.setOnClickListener {
+            wordleViewModel.addLetter('p')
+        }
+        binding.difficultyLevel.setOnClickListener {
+            wordleViewModel.removeLastLetter()
+        }
 
         val levelsArray = resources.getStringArray(R.array.levels)
-        view.findViewById<TextView>(R.id.difficulty_level).text = args.chosenGameLevel
-        val hintButtonView = view.findViewById<Button>(R.id.hint_button)
+        binding.difficultyLevel.text = args.chosenGameLevel
         if (args.chosenGameLevel == levelsArray[2]) { // Difícil
-            hintButtonView.visibility = View.GONE
+            binding.hintButton.visibility = View.GONE
         } else {
-            hintButtonView.setOnClickListener {
+            binding.hintButton.setOnClickListener {
                 when (args.chosenGameLevel) {
-                    levelsArray[0] -> showHintImageDialog(false, args.randomPokemonId)// Fácil
-                    levelsArray[1] -> showHintImageDialog(true, args.randomPokemonId) // Intermedio
+                    levelsArray[0] -> showHintImageDialog(false)// Fácil
+                    levelsArray[1] -> showHintImageDialog(true) // Intermedio
                 }
             }
         }
 
+        return binding.root
     }
 
-    private fun showHintImageDialog(showsPokemonType: Boolean, pokemonId: Int) {
-        val dialog = PokemonImageHintDialog(showsPokemonType, pokemonId)
+    private fun showHintImageDialog(showsPokemonType: Boolean) {
+        val dialog = PokemonImageHintDialog(showsPokemonType)
         dialog.show(parentFragmentManager, "Pokemon Image Hint")
         view?.findViewById<Button>(R.id.hint_button)?.visibility = View.GONE
     }
