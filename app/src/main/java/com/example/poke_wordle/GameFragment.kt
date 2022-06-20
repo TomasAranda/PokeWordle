@@ -45,4 +45,8 @@ class GameFragment : Fragment() {
         view?.findViewById<Button>(R.id.hint_button)?.visibility = View.GONE
     }
 
+    private fun showImageWinLoose(ganador:Boolean){
+        val ganador = true;
+    }
+
 }
