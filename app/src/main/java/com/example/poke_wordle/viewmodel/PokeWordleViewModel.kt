@@ -1,6 +1,7 @@
 package com.example.poke_wordle.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,21 +19,19 @@ class PokeWordleViewModel(
 ) : ViewModel() {
     private var nextPosition = mutableListOf(0,0)
 
-    var pokemon = MutableLiveData<Pokemon>().also {
+    init {
         viewModelScope.launch {
-            val pokemonId = pokeWordlePlayRepository.get(LocalDate.now())?.pokemonId!!
-            it.value = pokemonRepository.get(pokemonId)
+            val wordle = pokeWordlePlayRepository.get(LocalDate.now())
+            _wordle.value = wordle
+            fetchPokemonOfTheDay(wordle)
         }
     }
 
-    val wordle = MutableLiveData<PokeWordle?>()
+    private val _pokemonOfTheDay = MutableLiveData<Pokemon>()
+    val pokemonOfTheDay: LiveData<Pokemon> = _pokemonOfTheDay
 
-    fun new() {
-        viewModelScope.launch {
-            val wordleFromDB = pokeWordlePlayRepository.get(LocalDate.now())?.toDomainModel()
-            wordle.postValue(wordleFromDB)
-        }
-    }
+    private val _wordle = MutableLiveData<PokeWordle?>()
+    val wordle: LiveData<PokeWordle?> = _wordle
 
     fun addGuess() {
 
@@ -48,8 +47,8 @@ class PokeWordleViewModel(
                 nextPosition[0] += 1
                 nextPosition[1] = 0
             }
-            val newState = wordle.value?.let { PokeWordle(it.solutionWord, it.pokemonId, updatedAttempts) }
-            wordle.postValue(newState)
+            val newState = wordle.value?.let { PokeWordle(it.level, it.solutionWord, it.pokemonId, updatedAttempts) }
+            _wordle.postValue(newState)
             Log.d("WORDLE STATE", wordle.value.toString())
             Log.d("ADD LETTER", nextPosition.toString())
         }
@@ -66,9 +65,24 @@ class PokeWordleViewModel(
             updatedAttempts[previousPosition.first()][previousPosition.last()] = ' '
             nextPosition = previousPosition
 
-            val newState = wordle.value?.let { PokeWordle(it.solutionWord, it.pokemonId, updatedAttempts) }
-            wordle.postValue(newState)
+            val newState = wordle.value?.let { PokeWordle(it.level, it.solutionWord, it.pokemonId, updatedAttempts) }
+            _wordle.postValue(newState)
         }
     }
 
+    suspend fun fetchPokemonOfTheDay(wordle: PokeWordle?) {
+        if (wordle == null) {
+            _pokemonOfTheDay.value = pokemonRepository.getRandomFromDB()
+        } else {
+            _pokemonOfTheDay.value = pokemonRepository.get(wordle.pokemonId)
+        }
+    }
+
+    fun createNewGame(level: String) {
+        viewModelScope.launch {
+            val pokemonId = pokemonOfTheDay.value!!.id
+            val pokemonName = _pokemonOfTheDay.value!!.name
+            pokeWordlePlayRepository.newGame(level, pokemonId, pokemonName)
+        }
+    }
 }

@@ -26,6 +26,7 @@ internal fun WordlePlayEntity.toDomainModel(): PokeWordle {
     }
 
     return PokeWordle(
+        this.level,
         this.solutionWord,
         this.pokemonId,
         attemptsList

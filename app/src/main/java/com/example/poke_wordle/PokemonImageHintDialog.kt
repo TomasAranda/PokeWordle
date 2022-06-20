@@ -2,7 +2,10 @@ package com.example.poke_wordle
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -12,43 +15,48 @@ import com.example.poke_wordle.databinding.FragmentHintDialogBinding
 import com.example.poke_wordle.db.AppDatabase
 import com.example.poke_wordle.domain.Pokemon
 import com.example.poke_wordle.network.PokemonService
+import com.example.poke_wordle.repository.PokeWordlePlayRepository
 import com.example.poke_wordle.repository.PokemonRepository
 import com.example.poke_wordle.util.MaskTransformation
 import com.example.poke_wordle.viewmodel.HintImageViewModel
+import com.example.poke_wordle.viewmodel.PokeWordleViewModel
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.lang.Exception
 
-class PokemonImageHintDialog(private val showsPokemonType: Boolean, private val pokemon: Pokemon) : DialogFragment() {
-    private lateinit var viewModel: HintImageViewModel
+class PokemonImageHintDialog(private val showsPokemonType: Boolean) : DialogFragment() {
+    private lateinit var wordleViewModel: PokeWordleViewModel
+    private lateinit var binding: FragmentHintDialogBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = HintImageViewModel(
-            pokemon,
-            PokemonRepository(
-                PokemonService.create(),
-                AppDatabase.getInstance(requireContext()).pokemonDao()
-            )
-        )
+
+        val db = AppDatabase.getInstance(requireContext())
+        val pokemonDao = db.pokemonDao()
+        val pokeWordlePlayDao = db.pokeWordlePlayDao()
+        val service = PokemonService.create()
+        val pokemonRepository = PokemonRepository(service, pokemonDao)
+        val pokeWordlePlayRepository = PokeWordlePlayRepository(pokeWordlePlayDao)
+        wordleViewModel = PokeWordleViewModel(pokemonRepository, pokeWordlePlayRepository)
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return activity?.let {
-            val builder = AlertDialog.Builder(it)
-            val binding = FragmentHintDialogBinding.inflate(layoutInflater)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentHintDialogBinding.inflate(layoutInflater)
+        wordleViewModel.wordle.observe(viewLifecycleOwner) {
+            binding.dialogTitle.text = if (it?.level == "Fácil") "El Pokemon tiene esta forma" else "El Pokemon es de este tipo"
+        }
+        wordleViewModel.pokemonOfTheDay.observe(viewLifecycleOwner) { pokemon ->
             if (showsPokemonType) {
-                val pokemonType = viewModel.getPokemonType()
-                builder.setTitle("El Pokemon es de este tipo:")
-                loadPokemonTypeImage(binding, pokemonType)
+                loadPokemonTypeImage(binding, pokemon.types)
             } else {
-                val pokemonImageUrl = viewModel.getPokemonImageUrl()
-                builder.setTitle("El Pokemon tiene esta forma")
-                loadPokemonImage(binding, pokemonImageUrl)
+                loadPokemonImage(binding, pokemon.imageUrl)
             }
-            builder.setView(binding.root)
-            builder.create()
-        } ?: throw IllegalStateException("Activity cannot be null")
+        }
+        return binding.root
     }
 
     private fun loadPokemonImage(binding: FragmentHintDialogBinding, pokemonImageUrl: String) {
@@ -69,6 +77,7 @@ class PokemonImageHintDialog(private val showsPokemonType: Boolean, private val 
                     primaryProgressBar.visibility = View.GONE
                 }
                 override fun onError(e: Exception?) {
+                    e?.message?.let { Log.e("IMAGE HINT LOADING ERROR", it) }
                     Toast.makeText(requireContext(), "Error al cargar la imagen", Toast.LENGTH_SHORT).show()
                 }
             })

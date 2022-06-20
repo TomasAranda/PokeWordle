@@ -21,10 +21,14 @@ class GameFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        wordleViewModel = PokeWordleViewModel(
-            PokemonRepository(PokemonService.create(), AppDatabase.getInstance(requireContext()).pokemonDao()),
-            PokeWordlePlayRepository(AppDatabase.getInstance(requireContext()).pokeWordlePlayDao())
-        )
+
+        val db = AppDatabase.getInstance(requireContext())
+        val pokemonDao = db.pokemonDao()
+        val pokeWordlePlayDao = db.pokeWordlePlayDao()
+        val service = PokemonService.create()
+        val pokemonRepository = PokemonRepository(service, pokemonDao)
+        val pokeWordlePlayRepository = PokeWordlePlayRepository(pokeWordlePlayDao)
+        wordleViewModel = PokeWordleViewModel(pokemonRepository, pokeWordlePlayRepository)
     }
 
     override fun onCreateView(
@@ -33,7 +37,6 @@ class GameFragment : Fragment() {
     ): View {
         binding = FragmentGameBinding.inflate(inflater)
 
-        wordleViewModel.new()
         wordleViewModel.wordle.observe(viewLifecycleOwner) {
             if (it != null) {
                 binding.attempts.text = it.attempts.toString()
@@ -64,7 +67,7 @@ class GameFragment : Fragment() {
     }
 
     private fun showHintImageDialog(showsPokemonType: Boolean) {
-        val dialog = PokemonImageHintDialog(showsPokemonType, wordleViewModel.pokemon.value!!)
+        val dialog = PokemonImageHintDialog(showsPokemonType)
         dialog.show(parentFragmentManager, "Pokemon Image Hint")
         view?.findViewById<Button>(R.id.hint_button)?.visibility = View.GONE
     }
