@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.Space
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.example.poke_wordle.databinding.FragmentGameBinding
@@ -51,7 +53,7 @@ class GameFragment : Fragment() {
         val levelsArray = resources.getStringArray(R.array.levels)
         binding.difficultyLevel.text = args.chosenGameLevel
         if (args.chosenGameLevel == levelsArray[2]) { // Difícil
-            binding.hintButton.visibility = View.GONE
+            removeHintButton()
         } else {
             binding.hintButton.setOnClickListener {
                 when (args.chosenGameLevel) {
@@ -67,18 +69,38 @@ class GameFragment : Fragment() {
     private fun showHintImageDialog(showsPokemonType: Boolean) {
         val dialog = PokemonImageHintDialog(showsPokemonType)
         dialog.show(parentFragmentManager, "Pokemon Image Hint")
-        view?.findViewById<Button>(R.id.hint_button)?.visibility = View.GONE
+        removeHintButton()
+    }
+
+    private fun removeHintButton() {
+        binding.hintButton.visibility = View.GONE
+        val spacer = Space(context)
+        spacer.layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, 180
+        )
+        binding.root.addView(spacer, 7)
     }
 
     private fun addWordleLetterViews(wordlePlay: PokeWordle) {
-        for ((index, _) in wordlePlay.solutionWord.withIndex()) {
-            binding.apply {
-                wordleRow1.addView(createTextView(), index)
-                wordleRow2.addView(createTextView(), index)
-                wordleRow3.addView(createTextView(), index)
-                wordleRow4.addView(createTextView(), index)
-                wordleRow5.addView(createTextView(), index)
-                wordleRow6.addView(createTextView(), index)
+        for ((index, letter) in wordlePlay.solutionWord.withIndex()) {
+            if (letter != '-') {
+                binding.apply {
+                    wordleRow1.addView(createTextView(), index)
+                    wordleRow2.addView(createTextView(), index)
+                    wordleRow3.addView(createTextView(), index)
+                    wordleRow4.addView(createTextView(), index)
+                    wordleRow5.addView(createTextView(), index)
+                    wordleRow6.addView(createTextView(), index)
+                }
+            } else {
+                binding.apply {
+                    wordleRow1.addView(createSpacerView(), index)
+                    wordleRow2.addView(createSpacerView(), index)
+                    wordleRow3.addView(createSpacerView(), index)
+                    wordleRow4.addView(createSpacerView(), index)
+                    wordleRow5.addView(createSpacerView(), index)
+                    wordleRow6.addView(createSpacerView(), index)
+                }
             }
         }
     }
@@ -87,8 +109,8 @@ class GameFragment : Fragment() {
         val tv = TextView(context)
         tv.gravity = Gravity.CENTER
         tv.textSize = 30F
-        tv.setTextColor(resources.getColor(R.color.black))
-        tv.setBackgroundColor(resources.getColor(R.color.white))
+        tv.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        tv.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
         tv.typeface = Typeface.DEFAULT_BOLD
 
         tv.setPadding(5, 5, 5, 5)
@@ -99,6 +121,14 @@ class GameFragment : Fragment() {
 
         tv.layoutParams = params
         return tv
+    }
+
+    private fun createSpacerView(): Space {
+        val spacer = Space(context)
+        spacer.layoutParams = LinearLayout.LayoutParams(
+            30, 120
+        )
+        return spacer
     }
 
 }

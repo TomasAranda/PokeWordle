@@ -21,7 +21,8 @@ class SeedDatabaseWorker(
             val pokemonList = call.body()?.toEntityList()
             if (call.isSuccessful) {
                 if (pokemonList != null) {
-                    AppDatabase.getInstance(applicationContext).pokemonDao().insertAll(pokemonList)
+                    val shortNamePokemonList = pokemonList.filter { it.name.length < 9 }
+                    AppDatabase.getInstance(applicationContext).pokemonDao().insertAll(shortNamePokemonList)
                 }
                 Result.success()
 
