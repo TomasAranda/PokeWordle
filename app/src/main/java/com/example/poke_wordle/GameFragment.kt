@@ -6,7 +6,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Space
 import android.widget.TextView
@@ -94,12 +93,12 @@ class GameFragment : Fragment() {
                 }
             } else {
                 binding.apply {
-                    wordleRow1.addView(createSpacerView(), index)
-                    wordleRow2.addView(createSpacerView(), index)
-                    wordleRow3.addView(createSpacerView(), index)
-                    wordleRow4.addView(createSpacerView(), index)
-                    wordleRow5.addView(createSpacerView(), index)
-                    wordleRow6.addView(createSpacerView(), index)
+                    wordleRow1.addView(createWordleSpacerView(), index)
+                    wordleRow2.addView(createWordleSpacerView(), index)
+                    wordleRow3.addView(createWordleSpacerView(), index)
+                    wordleRow4.addView(createWordleSpacerView(), index)
+                    wordleRow5.addView(createWordleSpacerView(), index)
+                    wordleRow6.addView(createWordleSpacerView(), index)
                 }
             }
         }
@@ -123,7 +122,7 @@ class GameFragment : Fragment() {
         return tv
     }
 
-    private fun createSpacerView(): Space {
+    private fun createWordleSpacerView(): Space {
         val spacer = Space(context)
         spacer.layoutParams = LinearLayout.LayoutParams(
             30, 120
