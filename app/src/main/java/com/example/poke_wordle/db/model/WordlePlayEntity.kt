@@ -13,22 +13,19 @@ data class WordlePlayEntity (
     val pokemonId: Int,
     val solutionWord: String,
     var attempts: Int,
-    var attemptsState: MutableList<String> = MutableList(6) { "" },
+    var attemptsState: List<String> = List(6) { "" },
     var hasWon: Boolean,
     val level: String
 )
 
 internal fun WordlePlayEntity.toDomainModel(): PokeWordle {
     Log.d("DOMAIN MAPPER", this.attemptsState.toString())
-    val attemptsList = List(6) {
-        val guess = this.attemptsState[it]
-        if (guess != "") guess.split("").single().toMutableList() else guess.toMutableList()
-    }
-
     return PokeWordle(
         this.level,
         this.solutionWord,
         this.pokemonId,
-        attemptsList
+        this.attempts,
+        this.attemptsState,
+        mutableListOf()
     )
 }

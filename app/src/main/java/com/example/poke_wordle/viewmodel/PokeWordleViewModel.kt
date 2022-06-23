@@ -1,11 +1,9 @@
 package com.example.poke_wordle.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.poke_wordle.db.model.toDomainModel
 import com.example.poke_wordle.domain.PokeWordle
 import com.example.poke_wordle.domain.Pokemon
 import com.example.poke_wordle.repository.PokeWordlePlayRepository
@@ -17,13 +15,11 @@ class PokeWordleViewModel(
     private val pokemonRepository: PokemonRepository,
     private val pokeWordlePlayRepository: PokeWordlePlayRepository
 ) : ViewModel() {
-    private var nextPosition = mutableListOf(0,0)
-
     init {
         viewModelScope.launch {
-            val wordle = pokeWordlePlayRepository.get(LocalDate.now())
-            _wordle.value = wordle
-            fetchPokemonOfTheDay(wordle)
+            val wordleFromDB = pokeWordlePlayRepository.get(LocalDate.now())
+            _wordle.value = wordleFromDB
+            fetchPokemonOfTheDay(wordleFromDB)
         }
     }
 
@@ -33,55 +29,45 @@ class PokeWordleViewModel(
     private val _wordle = MutableLiveData<PokeWordle?>()
     val wordle: LiveData<PokeWordle?> = _wordle
 
-    fun addGuess() {
+    private val _currentGuess = MutableLiveData("")
+    val currentGuess: LiveData<String> = _currentGuess
 
+    fun addGuess() {
+        viewModelScope.launch {
+            if (currentGuess.value?.length == wordle.value?.solutionWord?.length) {
+                currentGuess.value?.let { pokeWordlePlayRepository.updateGuesses(it) }
+            }
+        }
     }
 
     fun addLetter(letter: Char) {
-        if (nextPosition.first() <= 5) {
-            val updatedAttempts: List<MutableList<Char>> = wordle.value?.attempts ?: List(6) { MutableList(7) { ' ' } }
-            updatedAttempts[nextPosition.first()][nextPosition.last()] = letter
-            if (nextPosition[1] < wordle.value?.solutionWord?.length!! - 1) {
-                nextPosition[1] += 1
-            } else {
-                nextPosition[0] += 1
-                nextPosition[1] = 0
-            }
-            val newState = wordle.value?.let { PokeWordle(it.level, it.solutionWord, it.pokemonId, updatedAttempts) }
-            _wordle.postValue(newState)
-            Log.d("WORDLE STATE", wordle.value.toString())
-            Log.d("ADD LETTER", nextPosition.toString())
+        if (_currentGuess.value?.length!! < _wordle.value?.solutionWord?.length!!) {
+            _currentGuess.value = currentGuess.value + letter
         }
     }
 
     fun removeLastLetter() {
-        if (!(nextPosition.first() == 0 && nextPosition.last() == 0)){
-            val updatedAttempts: List<MutableList<Char>> = wordle.value?.attempts ?: List(6) { MutableList(7) { ' ' } }
-            val previousPosition: MutableList<Int> = if (nextPosition[1] == 0) {
-                mutableListOf(nextPosition[0] - 1, wordle.value?.solutionWord?.length!! - 1)
-            } else {
-                mutableListOf(nextPosition[0], nextPosition[1] - 1)
-            }
-            updatedAttempts[previousPosition.first()][previousPosition.last()] = ' '
-            nextPosition = previousPosition
-
-            val newState = wordle.value?.let { PokeWordle(it.level, it.solutionWord, it.pokemonId, updatedAttempts) }
-            _wordle.postValue(newState)
+        if (_currentGuess.value?.isNotEmpty()!!) {
+            _currentGuess.value = currentGuess.value?.dropLast(1)
         }
     }
 
-    suspend fun fetchPokemonOfTheDay(wordle: PokeWordle?) {
-        if (wordle == null) {
-            _pokemonOfTheDay.value = pokemonRepository.getRandomFromDB()
+    private suspend fun fetchPokemonOfTheDay(wordleFromDB: PokeWordle?) {
+        if (wordleFromDB == null) {
+            _pokemonOfTheDay.value = pokemonRepository.get(1)
+            //_pokemonOfTheDay.value = pokemonRepository.getRandomFromDB()
         } else {
-            _pokemonOfTheDay.value = pokemonRepository.get(wordle.pokemonId)
+            _pokemonOfTheDay.value = pokemonRepository.get(1)
+            //_pokemonOfTheDay.value = pokemonRepository.get(wordleFromDB.pokemonId)
         }
     }
 
     fun createNewGame(level: String) {
         viewModelScope.launch {
-            val pokemonId = pokemonOfTheDay.value!!.id
-            val pokemonName = _pokemonOfTheDay.value!!.name
+            //val pokemonId = _pokemonOfTheDay.value!!.id
+            //val pokemonName = _pokemonOfTheDay.value!!.name
+            val pokemonId = 1
+            val pokemonName = "bulbasaur"
             pokeWordlePlayRepository.newGame(level, pokemonId, pokemonName)
         }
     }

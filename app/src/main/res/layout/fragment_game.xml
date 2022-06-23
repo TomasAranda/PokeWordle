@@ -75,12 +75,33 @@
         android:text="@string/show_hint" />
 
     <TextView
+        android:id="@+id/add_letter"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="80sp"
+        android:layout_height="50dp"
+        android:textSize="30sp"
         android:textAlignment="center"
         android:gravity="center"
-        android:text="TECLADO"
+        android:text="ADD LETTER"
+        android:background="@color/teal_700"/>
+
+    <TextView
+        android:id="@+id/remove_letter"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:text="REMOVE LETTER"
+        android:background="@color/teal_700"/>
+
+    <TextView
+        android:id="@+id/enter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="40sp"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:text="ENTER"
         android:background="@color/teal_700"/>
 
 </LinearLayout>

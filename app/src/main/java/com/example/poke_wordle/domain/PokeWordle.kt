@@ -4,5 +4,7 @@ data class PokeWordle (
     val level: String,
     val solutionWord: String,
     val pokemonId: Int,
-    var attempts: List<MutableList<Char>> = List(6) { MutableList(solutionWord.length) { ' ' } }
+    val attempts: Int,
+    var attemptsState: List<String> = List(6) { "" },
+    var currentGuess: MutableList<LetterState>
 )

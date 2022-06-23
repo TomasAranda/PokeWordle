@@ -10,10 +10,12 @@ import android.widget.LinearLayout
 import android.widget.Space
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.forEachIndexed
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.example.poke_wordle.databinding.FragmentGameBinding
 import com.example.poke_wordle.db.AppDatabase
+import com.example.poke_wordle.domain.LetterState
 import com.example.poke_wordle.domain.PokeWordle
 import com.example.poke_wordle.network.PokemonService
 import com.example.poke_wordle.repository.PokeWordlePlayRepository
@@ -23,10 +25,12 @@ import com.example.poke_wordle.viewmodel.PokeWordleViewModel
 class GameFragment : Fragment() {
     private lateinit var binding: FragmentGameBinding
     private lateinit var wordleViewModel: PokeWordleViewModel
+    private var currentRowResource = 0
     private val args: GameFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        currentRowResource = resources.getIdentifier("wordle_row_1", "id", BuildConfig.APPLICATION_ID)
 
         val db = AppDatabase.getInstance(requireContext())
         val pokemonDao = db.pokemonDao()
@@ -47,6 +51,23 @@ class GameFragment : Fragment() {
             if (wordle != null) {
                 addWordleLetterViews(wordle)
             }
+            wordle?.let {
+                wordleViewModel.currentGuess.value?.let { guess -> updateLettersState(guess, it.solutionWord) }
+                updateCurrentRow(it.attempts + 1)
+            }
+        }
+
+        binding.addLetter.setOnClickListener {
+            wordleViewModel.addLetter('p')
+        }
+        binding.removeLetter.setOnClickListener {
+            wordleViewModel.removeLastLetter()
+        }
+        binding.enter.setOnClickListener {
+            wordleViewModel.addGuess()
+        }
+        wordleViewModel.currentGuess.observe(viewLifecycleOwner) {
+            updateCurrentGuess(it)
         }
 
         val levelsArray = resources.getStringArray(R.array.levels)
@@ -84,12 +105,12 @@ class GameFragment : Fragment() {
         for ((index, letter) in wordlePlay.solutionWord.withIndex()) {
             if (letter != '-') {
                 binding.apply {
-                    wordleRow1.addView(createTextView(), index)
-                    wordleRow2.addView(createTextView(), index)
-                    wordleRow3.addView(createTextView(), index)
-                    wordleRow4.addView(createTextView(), index)
-                    wordleRow5.addView(createTextView(), index)
-                    wordleRow6.addView(createTextView(), index)
+                    wordleRow1.addView(createWordleLetterView(), index)
+                    wordleRow2.addView(createWordleLetterView(), index)
+                    wordleRow3.addView(createWordleLetterView(), index)
+                    wordleRow4.addView(createWordleLetterView(), index)
+                    wordleRow5.addView(createWordleLetterView(), index)
+                    wordleRow6.addView(createWordleLetterView(), index)
                 }
             } else {
                 binding.apply {
@@ -104,7 +125,7 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun createTextView(): TextView {
+    private fun createWordleLetterView(): TextView {
         val tv = TextView(context)
         tv.gravity = Gravity.CENTER
         tv.textSize = 30F
@@ -128,6 +149,35 @@ class GameFragment : Fragment() {
             30, 120
         )
         return spacer
+    }
+
+    private fun updateCurrentRow(current: Int) {
+        currentRowResource = resources.getIdentifier("wordle_row_${current}", "id", BuildConfig.APPLICATION_ID)
+    }
+
+    private fun updateLettersState(guess: String, solutionWord: String) {
+        val guessState = MutableList(solutionWord.length) { LetterState.INCORRECT }
+        guess.forEachIndexed { index, letter ->
+            if (solutionWord.contains(letter, true)) {
+                if (solutionWord[index] == guess[index]) {
+                    guessState[index] = LetterState.CORRECT
+                } else {
+                    guessState[index] = LetterState.WRONG_POSITION
+                }
+            }
+        }
+
+    }
+
+    private fun updateCurrentGuess(guess: String) {
+        val rowLinearlayout = view?.findViewById<LinearLayout>(currentRowResource)
+        rowLinearlayout?.forEachIndexed { index, view ->
+            if (index < guess.length) {
+                (view as TextView).text = guess[index].toString().uppercase()
+            } else {
+                (view as TextView).text = ""
+            }
+        }
     }
 
 }

@@ -18,16 +18,19 @@ class PokeWordlePlayRepository(
             MutableList(6) { "" },
             false,
             level)
-        wordlePlayDao.upsertWordlePlay(newGame)
+        wordlePlayDao.insertWordlePlay(newGame)
     }
 
     suspend fun get(date: LocalDate): PokeWordle? {
         return wordlePlayDao.getWordlePlay(date)?.toDomainModel()
     }
 
-    suspend fun updateGuesses(date: LocalDate, newGuess: String) {
-        val newGuesses = wordlePlayDao.getWordlePlay(date)?.attemptsState?.map { if(it == "") newGuess else it }?.toMutableList()
-        wordlePlayDao.updateWordlePlayGuesses(newGuesses!!, date)
+    suspend fun updateGuesses(newGuess: String) {
+        val currentPlay = wordlePlayDao.getWordlePlay(LocalDate.now())
+        val newGuesses = currentPlay?.attemptsState?.mapIndexed { index, guess ->
+            if (index == currentPlay.attempts) newGuess else guess
+        }
+        newGuesses?.let { wordlePlayDao.updateWordlePlayGuesses(it, LocalDate.now()) }
     }
 
 }

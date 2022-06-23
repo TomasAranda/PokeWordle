@@ -17,13 +17,13 @@ class Converters {
     fun stringToLocalDate(stringDate: String): LocalDate = LocalDate.parse(stringDate)
 
     @TypeConverter
-    fun stringToMutableList(value: String?): MutableList<String?>? {
-        val listType = object : TypeToken<MutableList<String?>?>() {}.type
+    fun stringToMutableList(value: String): List<String> {
+        val listType = object : TypeToken<List<String>>() {}.type
         return Gson().fromJson(value, listType)
     }
 
     @TypeConverter
-    fun mutableListToString(list: MutableList<String?>?): String? {
+    fun mutableListToString(list: List<String>): String {
         val gson = Gson()
         return gson.toJson(list)
     }
