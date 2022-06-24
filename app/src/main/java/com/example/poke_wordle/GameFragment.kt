@@ -102,24 +102,26 @@ class GameFragment : Fragment() {
     }
 
     private fun addWordleLetterViews(wordlePlay: PokeWordle) {
-        for ((index, letter) in wordlePlay.solutionWord.withIndex()) {
-            if (letter != '-') {
-                binding.apply {
-                    wordleRow1.addView(createWordleLetterView(), index)
-                    wordleRow2.addView(createWordleLetterView(), index)
-                    wordleRow3.addView(createWordleLetterView(), index)
-                    wordleRow4.addView(createWordleLetterView(), index)
-                    wordleRow5.addView(createWordleLetterView(), index)
-                    wordleRow6.addView(createWordleLetterView(), index)
-                }
-            } else {
-                binding.apply {
-                    wordleRow1.addView(createWordleSpacerView(), index)
-                    wordleRow2.addView(createWordleSpacerView(), index)
-                    wordleRow3.addView(createWordleSpacerView(), index)
-                    wordleRow4.addView(createWordleSpacerView(), index)
-                    wordleRow5.addView(createWordleSpacerView(), index)
-                    wordleRow6.addView(createWordleSpacerView(), index)
+        if (binding.wordleRow1.childCount != wordlePlay.solutionWord.length) {
+            for ((index, letter) in wordlePlay.solutionWord.withIndex()) {
+                if (letter != '-') {
+                    binding.apply {
+                        wordleRow1.addView(createWordleLetterView(), index)
+                        wordleRow2.addView(createWordleLetterView(), index)
+                        wordleRow3.addView(createWordleLetterView(), index)
+                        wordleRow4.addView(createWordleLetterView(), index)
+                        wordleRow5.addView(createWordleLetterView(), index)
+                        wordleRow6.addView(createWordleLetterView(), index)
+                    }
+                } else {
+                    binding.apply {
+                        wordleRow1.addView(createWordleSpacerView(), index)
+                        wordleRow2.addView(createWordleSpacerView(), index)
+                        wordleRow3.addView(createWordleSpacerView(), index)
+                        wordleRow4.addView(createWordleSpacerView(), index)
+                        wordleRow5.addView(createWordleSpacerView(), index)
+                        wordleRow6.addView(createWordleSpacerView(), index)
+                    }
                 }
             }
         }
@@ -132,7 +134,7 @@ class GameFragment : Fragment() {
                 val rowResource = resources.getIdentifier("wordle_row_${index + 1}", "id", BuildConfig.APPLICATION_ID)
                 val rowLinearLayout = view?.findViewById<LinearLayout>(rowResource)
                 rowLinearLayout?.forEachIndexed { viewIndex, view ->
-                    (view as TextView).text = attempt[viewIndex].toString()
+                    (view as TextView).text = attempt[viewIndex].toString().uppercase()
                 }
             }
         }
