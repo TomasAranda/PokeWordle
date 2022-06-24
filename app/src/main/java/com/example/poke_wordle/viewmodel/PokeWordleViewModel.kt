@@ -19,6 +19,7 @@ class PokeWordleViewModel(
         viewModelScope.launch {
             val wordleFromDB = pokeWordlePlayRepository.get(LocalDate.now())
             _wordle.value = wordleFromDB
+            _currentGuessNumber.value = wordleFromDB?.attempts?.plus(1)
             fetchPokemonOfTheDay(wordleFromDB)
         }
     }
@@ -32,13 +33,18 @@ class PokeWordleViewModel(
     private val _currentGuess = MutableLiveData("")
     val currentGuess: LiveData<String> = _currentGuess
 
+    private val _currentGuessNumber = MutableLiveData<Int>()
+    val currentGuessNumber: LiveData<Int> = _currentGuessNumber
+
     fun addGuess() {
         viewModelScope.launch {
             if (currentGuess.value?.length == wordle.value?.solutionWord?.length) {
                 currentGuess.value?.let {
                     pokeWordlePlayRepository.updateGuesses(it)
                     _wordle.value = pokeWordlePlayRepository.get(LocalDate.now())
+                    _currentGuessNumber.value = _currentGuessNumber.value?.plus(1)
                 }
+                _currentGuess.value = ""
             }
         }
     }

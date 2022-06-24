@@ -57,6 +57,13 @@ class GameFragment : Fragment() {
             }
         }
 
+        wordleViewModel.currentGuessNumber.observe(viewLifecycleOwner) {
+            updateCurrentRow(it)
+        }
+        wordleViewModel.currentGuess.observe(viewLifecycleOwner) {
+            updateCurrentGuess(it)
+        }
+
         binding.addLetter.setOnClickListener {
             wordleViewModel.addLetter('p')
         }
@@ -65,9 +72,6 @@ class GameFragment : Fragment() {
         }
         binding.enter.setOnClickListener {
             wordleViewModel.addGuess()
-        }
-        wordleViewModel.currentGuess.observe(viewLifecycleOwner) {
-            updateCurrentGuess(it)
         }
 
         val levelsArray = resources.getStringArray(R.array.levels)
