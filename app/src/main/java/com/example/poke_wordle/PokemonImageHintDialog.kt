@@ -1,6 +1,5 @@
 package com.example.poke_wordle
 
-import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,16 +8,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.example.poke_wordle.databinding.FragmentHintDialogBinding
 import com.example.poke_wordle.db.AppDatabase
-import com.example.poke_wordle.domain.Pokemon
 import com.example.poke_wordle.network.PokemonService
 import com.example.poke_wordle.repository.PokeWordlePlayRepository
 import com.example.poke_wordle.repository.PokemonRepository
 import com.example.poke_wordle.util.MaskTransformation
-import com.example.poke_wordle.viewmodel.HintImageViewModel
 import com.example.poke_wordle.viewmodel.PokeWordleViewModel
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -51,9 +47,9 @@ class PokemonImageHintDialog(private val showsPokemonType: Boolean) : DialogFrag
         }
         wordleViewModel.pokemonOfTheDay.observe(viewLifecycleOwner) { pokemon ->
             if (showsPokemonType) {
-                loadPokemonTypeImage(binding, pokemon.types)
+                pokemon?.let { loadPokemonTypeImage(binding, it.types) }
             } else {
-                loadPokemonImage(binding, pokemon.imageUrl)
+                pokemon?.let { loadPokemonImage(binding, it.imageUrl) }
             }
         }
         return binding.root

@@ -13,7 +13,6 @@ import com.example.poke_wordle.network.PokemonService
 import com.example.poke_wordle.repository.PokeWordlePlayRepository
 import com.example.poke_wordle.repository.PokemonRepository
 import com.example.poke_wordle.viewmodel.PokeWordleViewModel
-import com.example.poke_wordle.viewmodel.WelcomeViewModel
 
 class WelcomeFragment : Fragment() {
     private lateinit var wordleViewModel: PokeWordleViewModel
@@ -37,10 +36,6 @@ class WelcomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        /* view.findViewById<CustomButtonView>(R.id.wordle_letter_button).setOnClickListener {
-            (it as CustomButtonView).letterState = LetterState.CORRECT
-        } */
 
         val playButton = view.findViewById<Button>(R.id.play_button)
         wordleViewModel.wordle.observe(viewLifecycleOwner) { wordle ->
@@ -73,7 +68,7 @@ class WelcomeFragment : Fragment() {
     }
 
     private fun showLevelPickerDialog(navigationAction: (String) -> Unit) {
-        val dialog  = LevelsPickerDialogFragment(navigationAction)
+        val dialog = LevelsPickerDialogFragment(navigationAction)
         dialog.show(parentFragmentManager, "Select level")
     }
 

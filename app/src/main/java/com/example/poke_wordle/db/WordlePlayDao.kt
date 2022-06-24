@@ -14,19 +14,10 @@ interface WordlePlayDao {
     suspend fun getWordlePlay(date: LocalDate): WordlePlayEntity?
 
     @Query("UPDATE `pokewordle-play` SET attemptsState=:newAttempts, attempts= attempts + 1 WHERE date = :date")
-    suspend fun updateWordlePlayGuesses(newAttempts: MutableList<String>, date: LocalDate)
+    suspend fun updateWordlePlayGuesses(newAttempts: List<String>, date: LocalDate)
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertWordlePlay(play: WordlePlayEntity)
-
-    suspend fun upsertWordlePlay(play: WordlePlayEntity) {
-        try {
-            insertWordlePlay(play)
-        }
-        catch (e: SQLiteConstraintException) {
-            updateWordlePlayGuesses(play.attemptsState, play.date)
-        }
-    }
 
     // TODO("ADD QUERY TO RETURN PLAY STATS")
     // Total jugadas: (SQL COUNT)
