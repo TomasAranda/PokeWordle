@@ -19,7 +19,7 @@ class PokeWordleViewModel(
         viewModelScope.launch {
             val wordleFromDB = pokeWordlePlayRepository.get(LocalDate.now())
             _wordle.value = wordleFromDB
-            _currentGuessNumber.value = wordleFromDB?.attempts?.plus(1)
+            _currentGuessNumber.value = wordleFromDB?.attempts?.plus(1) ?: 1
             fetchPokemonOfTheDay(wordleFromDB)
         }
     }

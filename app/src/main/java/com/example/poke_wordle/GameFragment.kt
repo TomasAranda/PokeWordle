@@ -1,5 +1,6 @@
 package com.example.poke_wordle
 
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Gravity
@@ -11,6 +12,7 @@ import android.widget.Space
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.forEachIndexed
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.example.poke_wordle.databinding.FragmentGameBinding
@@ -50,10 +52,7 @@ class GameFragment : Fragment() {
         wordleViewModel.wordle.observe(viewLifecycleOwner) { wordle ->
             if (wordle != null) {
                 addWordleLetterViews(wordle)
-            }
-            wordle?.let {
-                wordleViewModel.currentGuess.value?.let { guess -> updateLettersState(guess, it.solutionWord) }
-                updateCurrentRow(it.attempts + 1)
+                updateLettersState(wordle)
             }
         }
 
@@ -65,7 +64,7 @@ class GameFragment : Fragment() {
         }
 
         binding.addLetter.setOnClickListener {
-            wordleViewModel.addLetter('p')
+            wordleViewModel.addLetter('b')
         }
         binding.removeLetter.setOnClickListener {
             wordleViewModel.removeLastLetter()
@@ -174,18 +173,33 @@ class GameFragment : Fragment() {
         currentRowResource = resources.getIdentifier("wordle_row_${current}", "id", BuildConfig.APPLICATION_ID)
     }
 
-    private fun updateLettersState(guess: String, solutionWord: String) {
-        val guessState = MutableList(solutionWord.length) { LetterState.INCORRECT }
-        guess.forEachIndexed { index, letter ->
-            if (solutionWord.contains(letter, true)) {
-                if (solutionWord[index] == guess[index]) {
-                    guessState[index] = LetterState.CORRECT
-                } else {
-                    guessState[index] = LetterState.WRONG_POSITION
+    private fun updateLettersState(wordle: PokeWordle) {
+        for ((rowIndex, guess) in wordle.attemptsState.withIndex()) {
+            if (guess != "") {
+                val rowResource = resources.getIdentifier("wordle_row_${rowIndex + 1}", "id", BuildConfig.APPLICATION_ID)
+                val rowLinearlayout = view?.findViewById<LinearLayout>(rowResource)
+                guess.forEachIndexed { letterIndex, letter ->
+                    val letterState = getLetterState(letter, letterIndex, wordle.solutionWord)
+                    val letterViewColor = when(letterState) {
+                        LetterState.CORRECT -> { Color.parseColor("#6aaa64") }
+                        LetterState.WRONG_POSITION -> { Color.parseColor("#c9b458") }
+                        LetterState.INCORRECT -> { Color.parseColor("#787c7e") }
+                    }
+                    rowLinearlayout?.get(letterIndex)?.setBackgroundColor(letterViewColor)
                 }
             }
         }
+    }
 
+    private fun getLetterState(letter: Char, index: Int, solutionWord: String): LetterState {
+        if (solutionWord.contains(letter)) {
+            return if (solutionWord[index] == letter) {
+                LetterState.CORRECT
+            } else {
+                LetterState.WRONG_POSITION
+            }
+        }
+        return LetterState.INCORRECT
     }
 
     private fun updateCurrentGuess(guess: String) {
