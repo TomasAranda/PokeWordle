@@ -24,16 +24,6 @@
         android:layout_height="50dp"
         android:orientation="horizontal"
         android:gravity="center">
-        <!--<TextView
-            android:gravity="center"
-            android:layout_width="40dp"
-            android:layout_height="50dp"
-            android:textSize="30sp"
-            tools:text="P"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:padding="5dp"
-            android:background="#FAFAFA"/>-->
     </LinearLayout>
     <LinearLayout
         android:id="@+id/wordle_row_2"
@@ -74,34 +64,10 @@
         android:fontFamily="@font/pokemon_solid"
         android:text="@string/show_hint" />
 
-    <TextView
-        android:id="@+id/add_letter"
+    <androidx.fragment.app.FragmentContainerView
+        android:name="com.example.poke_wordle.KeyboardFragment"
+        android:id="@+id/keyboard"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:textSize="30sp"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:text="ADD LETTER"
-        android:background="@color/teal_700"/>
-
-    <TextView
-        android:id="@+id/remove_letter"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:textSize="30sp"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:text="REMOVE LETTER"
-        android:background="@color/teal_700"/>
-
-    <TextView
-        android:id="@+id/enter"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="40sp"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:text="ENTER"
-        android:background="@color/teal_700"/>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
