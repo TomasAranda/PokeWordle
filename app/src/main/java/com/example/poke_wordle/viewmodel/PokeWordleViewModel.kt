@@ -35,7 +35,10 @@ class PokeWordleViewModel(
     fun addGuess() {
         viewModelScope.launch {
             if (currentGuess.value?.length == wordle.value?.solutionWord?.length) {
-                currentGuess.value?.let { pokeWordlePlayRepository.updateGuesses(it) }
+                currentGuess.value?.let {
+                    pokeWordlePlayRepository.updateGuesses(it)
+                    _wordle.value = pokeWordlePlayRepository.get(LocalDate.now())
+                }
             }
         }
     }

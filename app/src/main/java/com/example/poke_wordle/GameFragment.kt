@@ -123,6 +123,19 @@ class GameFragment : Fragment() {
                 }
             }
         }
+        addAttempts(wordlePlay)
+    }
+
+    private fun addAttempts(wordlePlay: PokeWordle) {
+        for ((index, attempt) in wordlePlay.attemptsState.withIndex()) {
+            if (attempt.isNotEmpty()) {
+                val rowResource = resources.getIdentifier("wordle_row_${index + 1}", "id", BuildConfig.APPLICATION_ID)
+                val rowLinearLayout = view?.findViewById<LinearLayout>(rowResource)
+                rowLinearLayout?.forEachIndexed { viewIndex, view ->
+                    (view as TextView).text = attempt[viewIndex].toString()
+                }
+            }
+        }
     }
 
     private fun createWordleLetterView(): TextView {
