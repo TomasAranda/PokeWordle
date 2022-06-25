@@ -76,7 +76,7 @@ class PokeWordleViewModel(
             //val pokemonId = _pokemonOfTheDay.value!!.id
             //val pokemonName = _pokemonOfTheDay.value!!.name
             val pokemonId = 1
-            val pokemonName = "bulbasaur"
+            val pokemonName = "bulbasaur".uppercase()
             pokeWordlePlayRepository.newGame(level, pokemonId, pokemonName)
         }
     }
