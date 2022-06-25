@@ -1,4 +1,4 @@
-package com.example.poke_wordle.picasso.transformations
+package com.example.poke_wordle.util
 
 import android.content.Context
 import android.graphics.Paint
@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import com.squareup.picasso.Transformation
 
-// TODO("MANDAR A CARPETA UTIL")
 class MaskTransformation(context: Context, maskId: Int) : Transformation {
     private val mContext: Context
     private val mMaskId: Int

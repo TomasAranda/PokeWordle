@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.poke_wordle.db.AppDatabase
-import com.example.poke_wordle.db.Pokemon
+import com.example.poke_wordle.db.model.PokemonEntity
 import com.example.poke_wordle.network.PokemonList
 import com.example.poke_wordle.network.PokemonService
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +21,8 @@ class SeedDatabaseWorker(
             val pokemonList = call.body()?.toEntityList()
             if (call.isSuccessful) {
                 if (pokemonList != null) {
-                    AppDatabase.getInstance(applicationContext).pokemonDao().insertAll(pokemonList)
+                    val shortNamePokemonList = pokemonList.filter { it.name.length < 9 }
+                    AppDatabase.getInstance(applicationContext).pokemonDao().insertAll(shortNamePokemonList)
                 }
                 Result.success()
 
@@ -36,9 +37,9 @@ class SeedDatabaseWorker(
     }
 }
 
-private fun PokemonList.toEntityList(): List<Pokemon> {
+private fun PokemonList.toEntityList(): List<PokemonEntity> {
     return this.results.map {
-        Pokemon(
+        PokemonEntity(
             it.url.split('/').dropLast(1).last().toInt(),
             it.name,
             it.url

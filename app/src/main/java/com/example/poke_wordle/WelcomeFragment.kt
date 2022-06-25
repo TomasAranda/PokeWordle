@@ -1,6 +1,7 @@
 package com.example.poke_wordle
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,28 +9,50 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import com.example.poke_wordle.db.AppDatabase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.poke_wordle.network.PokemonService
+import com.example.poke_wordle.repository.PokeWordlePlayRepository
+import com.example.poke_wordle.repository.PokemonRepository
+import com.example.poke_wordle.viewmodel.PokeWordleViewModel
 
 class WelcomeFragment : Fragment() {
-    private var pokemonOfTheDayId: Int = 0
+    private lateinit var wordleViewModel: PokeWordleViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        getRandomPokemonId()
+        super.onCreate(savedInstanceState)
+
+        val db = AppDatabase.getInstance(requireContext())
+        val pokemonDao = db.pokemonDao()
+        val pokeWordlePlayDao = db.pokeWordlePlayDao()
+        val service = PokemonService.create()
+        val pokemonRepository = PokemonRepository(service, pokemonDao)
+        val pokeWordlePlayRepository = PokeWordlePlayRepository(pokeWordlePlayDao)
+        wordleViewModel = PokeWordleViewModel(pokemonRepository, pokeWordlePlayRepository)
+
         return inflater.inflate(R.layout.fragment_welcome, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<Button>(R.id.play_button).setOnClickListener {
-            showLevelPickerDialog {
-                val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment(it, pokemonOfTheDayId)
-                findNavController().navigate(action)
+        val playButton = view.findViewById<Button>(R.id.play_button)
+        wordleViewModel.wordle.observe(viewLifecycleOwner) { wordle ->
+            if (wordle != null) {
+                Log.d("WELCOME FRAGMENT", "WORDLE PLAY NOT NULL")
+                playButton.setOnClickListener {
+                    val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment(wordle.level)
+                    findNavController().navigate(action)
+                }
+            } else {
+                Log.d("WELCOME FRAGMENT", "WORDLE PLAY NULL")
+                playButton.setOnClickListener {
+                    showLevelPickerDialog { level ->
+                        val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment(level)
+                        findNavController().navigate(action)
+                    }
+                }
             }
         }
 
@@ -38,7 +61,6 @@ class WelcomeFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-
         view.findViewById<Button>(R.id.help_button).setOnClickListener {
             val action = WelcomeFragmentDirections.actionWelcomeFragmentToHelpFragment()
             findNavController().navigate(action)
@@ -46,18 +68,8 @@ class WelcomeFragment : Fragment() {
     }
 
     private fun showLevelPickerDialog(navigationAction: (String) -> Unit) {
-        val dialog  = LevelsDialogFragment(navigationAction)
+        val dialog = LevelsPickerDialogFragment(navigationAction)
         dialog.show(parentFragmentManager, "Select level")
-    }
-
-    private fun getRandomPokemonId() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val db = context?.let { AppDatabase.getInstance(it) }
-            val pokemon = db?.pokemonDao()?.getRandomPokemonFromList()
-            if (pokemon != null) {
-                pokemonOfTheDayId = pokemon.id
-            }
-        }
     }
 
 }

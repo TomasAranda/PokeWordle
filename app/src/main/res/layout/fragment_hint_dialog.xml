@@ -2,9 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_gravity="center"
     android:gravity="center">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:id="@+id/dialog_title"
+        style="@style/TextAppearance.Material3.TitleLarge"
+        tools:text="Título"/>
 
     <RelativeLayout
         android:id="@+id/primary_image"
@@ -16,7 +24,7 @@
             android:id="@+id/primary_image_iv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
+            tools:src="@drawable/bug_type_icon"
             android:contentDescription="@string/primary_type_of_the_pokemon" />
 
         <ProgressBar
