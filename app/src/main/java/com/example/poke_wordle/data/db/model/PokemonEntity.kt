@@ -16,7 +16,7 @@ data class PokemonEntity(
 internal fun PokemonEntity.toDomainModel(): Pokemon {
     return Pokemon(
         this.id,
-        this.name,
+        this.name.uppercase(),
         this.url,
         List(2) {""}
     )

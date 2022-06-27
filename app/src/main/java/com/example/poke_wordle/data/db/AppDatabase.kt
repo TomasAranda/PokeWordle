@@ -8,6 +8,7 @@ import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.example.poke_wordle.data.db.model.PokemonEntity
 import com.example.poke_wordle.data.db.model.WordlePlayEntity
 import com.example.poke_wordle.workers.SeedDatabaseWorker
@@ -38,6 +39,7 @@ abstract class AppDatabase : RoomDatabase() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
                             val request = OneTimeWorkRequestBuilder<SeedDatabaseWorker>()
+                                .setInputData(workDataOf("data-filename" to "pokemons.json"))
                                 .build()
                             WorkManager.getInstance(context).enqueue(request)
                         }
