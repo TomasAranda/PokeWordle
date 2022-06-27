@@ -18,17 +18,14 @@ import androidx.navigation.fragment.navArgs
 import com.example.poke_wordle.BuildConfig
 import com.example.poke_wordle.R
 import com.example.poke_wordle.databinding.FragmentGameBinding
-import com.example.poke_wordle.data.db.AppDatabase
 import com.example.poke_wordle.domain.LetterState
 import com.example.poke_wordle.domain.PokeWordle
-import com.example.poke_wordle.data.network.PokemonService
-import com.example.poke_wordle.data.repository.PokeWordlePlayRepository
-import com.example.poke_wordle.data.repository.PokemonRepository
 import com.example.poke_wordle.ui.viewmodel.PokeWordleViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class GameFragment : Fragment() {
     private lateinit var binding: FragmentGameBinding
-    private lateinit var wordleViewModel: PokeWordleViewModel
+    private val wordleViewModel by sharedViewModel<PokeWordleViewModel>()
     private var currentRowResource = 0
     private val args: GameFragmentArgs by navArgs()
 
@@ -37,14 +34,6 @@ class GameFragment : Fragment() {
         currentRowResource = resources.getIdentifier("wordle_row_1", "id",
             BuildConfig.APPLICATION_ID
         )
-
-        val db = AppDatabase.getInstance(requireContext())
-        val pokemonDao = db.pokemonDao()
-        val pokeWordlePlayDao = db.pokeWordlePlayDao()
-        val service = PokemonService.create()
-        val pokemonRepository = PokemonRepository(service, pokemonDao)
-        val pokeWordlePlayRepository = PokeWordlePlayRepository(pokeWordlePlayDao)
-        wordleViewModel = PokeWordleViewModel(pokemonRepository, pokeWordlePlayRepository)
     }
 
     override fun onCreateView(

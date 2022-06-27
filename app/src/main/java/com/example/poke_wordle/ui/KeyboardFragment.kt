@@ -10,29 +10,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.view.forEach
 import com.example.poke_wordle.databinding.FragmentKeyboardBinding
-import com.example.poke_wordle.data.db.AppDatabase
 import com.example.poke_wordle.domain.LetterState
 import com.example.poke_wordle.domain.PokeWordle
-import com.example.poke_wordle.data.network.PokemonService
-import com.example.poke_wordle.data.repository.PokeWordlePlayRepository
-import com.example.poke_wordle.data.repository.PokemonRepository
 import com.example.poke_wordle.ui.viewmodel.PokeWordleViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class KeyboardFragment() : Fragment() {
     private lateinit var binding: FragmentKeyboardBinding
-    private lateinit var wordleViewModel: PokeWordleViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val db = AppDatabase.getInstance(requireContext())
-        val pokemonDao = db.pokemonDao()
-        val pokeWordlePlayDao = db.pokeWordlePlayDao()
-        val service = PokemonService.create()
-        val pokemonRepository = PokemonRepository(service, pokemonDao)
-        val pokeWordlePlayRepository = PokeWordlePlayRepository(pokeWordlePlayDao)
-        wordleViewModel = PokeWordleViewModel(pokemonRepository, pokeWordlePlayRepository)
-    }
+    private val wordleViewModel by sharedViewModel<PokeWordleViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
