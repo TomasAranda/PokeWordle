@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tp_Mobile</string>
+    <string name="app_name">Poke Wordle</string>
     <string name="play_button">Jugar</string>
     <string name="stats_button">Stats</string>
     <string name="stats_image_content_description">Stats example view</string>
