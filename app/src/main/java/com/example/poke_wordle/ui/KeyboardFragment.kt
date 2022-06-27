@@ -15,7 +15,7 @@ import com.example.poke_wordle.domain.PokeWordle
 import com.example.poke_wordle.ui.viewmodel.PokeWordleViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class KeyboardFragment() : Fragment() {
+class KeyboardFragment : Fragment() {
     private lateinit var binding: FragmentKeyboardBinding
     private val wordleViewModel by sharedViewModel<PokeWordleViewModel>()
 
@@ -83,13 +83,13 @@ class KeyboardFragment() : Fragment() {
         binding.firstRow.forEach { view ->
             val letterPair = usedLetters.find { it.first == (view as Button).text.single() }
             letterPair?.let {
-                view.setBackgroundTintList(ColorStateList.valueOf(getLetterStateColor(it.second)))
+                view.backgroundTintList = ColorStateList.valueOf(getLetterStateColor(it.second))
             }
         }
         binding.secondRow.forEach { view ->
             val letterPair = usedLetters.find { it.first == (view as Button).text.single() }
             letterPair?.let {
-                view.setBackgroundTintList(ColorStateList.valueOf(getLetterStateColor(it.second)))
+                view.backgroundTintList = ColorStateList.valueOf(getLetterStateColor(it.second))
             }
         }
         binding.thirdRow.forEach { view ->
