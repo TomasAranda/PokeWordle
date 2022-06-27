@@ -1,4 +1,4 @@
-package com.example.poke_wordle
+package com.example.poke_wordle.ui
 
 import android.os.Bundle
 import android.util.Log
@@ -9,13 +9,15 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import com.example.poke_wordle.BuildConfig
+import com.example.poke_wordle.R
 import com.example.poke_wordle.databinding.FragmentHintDialogBinding
-import com.example.poke_wordle.db.AppDatabase
-import com.example.poke_wordle.network.PokemonService
-import com.example.poke_wordle.repository.PokeWordlePlayRepository
-import com.example.poke_wordle.repository.PokemonRepository
+import com.example.poke_wordle.data.db.AppDatabase
+import com.example.poke_wordle.data.network.PokemonService
+import com.example.poke_wordle.data.repository.PokeWordlePlayRepository
+import com.example.poke_wordle.data.repository.PokemonRepository
 import com.example.poke_wordle.util.MaskTransformation
-import com.example.poke_wordle.viewmodel.PokeWordleViewModel
+import com.example.poke_wordle.ui.viewmodel.PokeWordleViewModel
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.lang.Exception

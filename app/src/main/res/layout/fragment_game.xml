@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    tools:context=".WelcomeFragment"
+    tools:context=".ui.WelcomeFragment"
     android:background="@drawable/disenio_juego_limpia">
 
     <TextView
@@ -65,7 +65,7 @@
         android:text="@string/show_hint" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:name="com.example.poke_wordle.KeyboardFragment"
+        android:name="com.example.poke_wordle.ui.KeyboardFragment"
         android:id="@+id/keyboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

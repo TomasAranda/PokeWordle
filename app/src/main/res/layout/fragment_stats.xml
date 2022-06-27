@@ -6,4 +6,4 @@
     android:background="@drawable/disenio_juego_limpia"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".StatsFragment" />
+    tools:context=".ui.StatsFragment" />

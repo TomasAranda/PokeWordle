@@ -1,8 +1,8 @@
-package com.example.poke_wordle.repository
+package com.example.poke_wordle.data.repository
 
-import com.example.poke_wordle.db.WordlePlayDao
-import com.example.poke_wordle.db.model.WordlePlayEntity
-import com.example.poke_wordle.db.model.toDomainModel
+import com.example.poke_wordle.data.db.WordlePlayDao
+import com.example.poke_wordle.data.db.model.WordlePlayEntity
+import com.example.poke_wordle.data.db.model.toDomainModel
 import com.example.poke_wordle.domain.PokeWordle
 import java.time.LocalDate
 

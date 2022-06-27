@@ -1,7 +1,7 @@
-package com.example.poke_wordle.viewmodel
+package com.example.poke_wordle.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.poke_wordle.repository.PokemonRepository
+import com.example.poke_wordle.data.repository.PokemonRepository
 
 class HintImageViewModel(
     private val pokemonRepository: PokemonRepository

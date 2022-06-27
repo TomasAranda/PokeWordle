@@ -1,4 +1,4 @@
-package com.example.poke_wordle
+package com.example.poke_wordle.ui
 
 import android.graphics.Color
 import android.graphics.Typeface
@@ -15,14 +15,16 @@ import androidx.core.view.forEachIndexed
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import com.example.poke_wordle.BuildConfig
+import com.example.poke_wordle.R
 import com.example.poke_wordle.databinding.FragmentGameBinding
-import com.example.poke_wordle.db.AppDatabase
+import com.example.poke_wordle.data.db.AppDatabase
 import com.example.poke_wordle.domain.LetterState
 import com.example.poke_wordle.domain.PokeWordle
-import com.example.poke_wordle.network.PokemonService
-import com.example.poke_wordle.repository.PokeWordlePlayRepository
-import com.example.poke_wordle.repository.PokemonRepository
-import com.example.poke_wordle.viewmodel.PokeWordleViewModel
+import com.example.poke_wordle.data.network.PokemonService
+import com.example.poke_wordle.data.repository.PokeWordlePlayRepository
+import com.example.poke_wordle.data.repository.PokemonRepository
+import com.example.poke_wordle.ui.viewmodel.PokeWordleViewModel
 
 class GameFragment : Fragment() {
     private lateinit var binding: FragmentGameBinding
@@ -32,7 +34,9 @@ class GameFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        currentRowResource = resources.getIdentifier("wordle_row_1", "id", BuildConfig.APPLICATION_ID)
+        currentRowResource = resources.getIdentifier("wordle_row_1", "id",
+            BuildConfig.APPLICATION_ID
+        )
 
         val db = AppDatabase.getInstance(requireContext())
         val pokemonDao = db.pokemonDao()
@@ -124,7 +128,9 @@ class GameFragment : Fragment() {
     private fun addAttempts(wordlePlay: PokeWordle) {
         for ((index, attempt) in wordlePlay.attemptsState.withIndex()) {
             if (attempt.isNotEmpty()) {
-                val rowResource = resources.getIdentifier("wordle_row_${index + 1}", "id", BuildConfig.APPLICATION_ID)
+                val rowResource = resources.getIdentifier("wordle_row_${index + 1}", "id",
+                    BuildConfig.APPLICATION_ID
+                )
                 val rowLinearLayout = view?.findViewById<LinearLayout>(rowResource)
                 rowLinearLayout?.forEachIndexed { viewIndex, view ->
                     (view as TextView).text = attempt[viewIndex].toString().uppercase()
@@ -160,13 +166,17 @@ class GameFragment : Fragment() {
     }
 
     private fun updateCurrentRow(current: Int) {
-        currentRowResource = resources.getIdentifier("wordle_row_${current}", "id", BuildConfig.APPLICATION_ID)
+        currentRowResource = resources.getIdentifier("wordle_row_${current}", "id",
+            BuildConfig.APPLICATION_ID
+        )
     }
 
     private fun updateLettersState(wordle: PokeWordle) {
         for ((rowIndex, guess) in wordle.attemptsState.withIndex()) {
             if (guess != "") {
-                val rowResource = resources.getIdentifier("wordle_row_${rowIndex + 1}", "id", BuildConfig.APPLICATION_ID)
+                val rowResource = resources.getIdentifier("wordle_row_${rowIndex + 1}", "id",
+                    BuildConfig.APPLICATION_ID
+                )
                 val rowLinearlayout = view?.findViewById<LinearLayout>(rowResource)
                 guess.forEachIndexed { letterIndex, letter ->
                     val letterState = getLetterState(letter, letterIndex, wordle.solutionWord)

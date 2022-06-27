@@ -1,4 +1,4 @@
-package com.example.poke_wordle.db.model
+package com.example.poke_wordle.data.db.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

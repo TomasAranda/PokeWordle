@@ -1,4 +1,4 @@
-package com.example.poke_wordle
+package com.example.poke_wordle.ui
 
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -8,17 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.LinearLayout
 import androidx.core.view.forEach
-import androidx.core.view.get
 import com.example.poke_wordle.databinding.FragmentKeyboardBinding
-import com.example.poke_wordle.db.AppDatabase
+import com.example.poke_wordle.data.db.AppDatabase
 import com.example.poke_wordle.domain.LetterState
 import com.example.poke_wordle.domain.PokeWordle
-import com.example.poke_wordle.network.PokemonService
-import com.example.poke_wordle.repository.PokeWordlePlayRepository
-import com.example.poke_wordle.repository.PokemonRepository
-import com.example.poke_wordle.viewmodel.PokeWordleViewModel
+import com.example.poke_wordle.data.network.PokemonService
+import com.example.poke_wordle.data.repository.PokeWordlePlayRepository
+import com.example.poke_wordle.data.repository.PokemonRepository
+import com.example.poke_wordle.ui.viewmodel.PokeWordleViewModel
 
 class KeyboardFragment() : Fragment() {
     private lateinit var binding: FragmentKeyboardBinding

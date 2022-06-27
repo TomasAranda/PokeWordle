@@ -1,10 +1,8 @@
-package com.example.poke_wordle.viewmodel
+package com.example.poke_wordle.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.*
-import com.example.poke_wordle.domain.Pokemon
-import com.example.poke_wordle.repository.PokeWordlePlayRepository
-import com.example.poke_wordle.repository.PokemonRepository
+import com.example.poke_wordle.data.repository.PokeWordlePlayRepository
+import com.example.poke_wordle.data.repository.PokemonRepository
 import kotlinx.coroutines.launch
 
 class LevelPickerViewModel(

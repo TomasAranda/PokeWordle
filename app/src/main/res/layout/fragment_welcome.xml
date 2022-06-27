@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_alignParentRight="false"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".WelcomeFragment"
+    tools:context=".ui.WelcomeFragment"
     android:background="@drawable/juego_inicio">
 
     <ImageView
         android:id="@+id/imageView2"
+        android:contentDescription="@string/game_background_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -43,7 +43,7 @@
         style="?android:attr/buttonBarButtonStyle"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:fontFamily="@font/pokemon_solid"
         android:text="@string/stats_button"
         android:textColor="#F3EF32" />

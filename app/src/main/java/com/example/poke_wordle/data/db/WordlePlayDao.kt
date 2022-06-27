@@ -1,11 +1,10 @@
-package com.example.poke_wordle.db
+package com.example.poke_wordle.data.db
 
-import android.database.sqlite.SQLiteConstraintException
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.poke_wordle.db.model.WordlePlayEntity
+import com.example.poke_wordle.data.db.model.WordlePlayEntity
 import java.time.LocalDate
 
 @Dao

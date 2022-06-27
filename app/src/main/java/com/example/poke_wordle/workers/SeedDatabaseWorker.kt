@@ -4,10 +4,10 @@ import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.example.poke_wordle.db.AppDatabase
-import com.example.poke_wordle.db.model.PokemonEntity
-import com.example.poke_wordle.network.PokemonList
-import com.example.poke_wordle.network.PokemonService
+import com.example.poke_wordle.data.db.AppDatabase
+import com.example.poke_wordle.data.db.model.PokemonEntity
+import com.example.poke_wordle.data.network.PokemonList
+import com.example.poke_wordle.data.network.PokemonService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

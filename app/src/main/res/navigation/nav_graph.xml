@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="com.example.poke_wordle.WelcomeFragment"
+        android:name="com.example.poke_wordle.ui.WelcomeFragment"
         android:label="fragment_welcome"
         tools:layout="@layout/fragment_welcome" >
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/gameFragment"
-        android:name="com.example.poke_wordle.GameFragment"
+        android:name="com.example.poke_wordle.ui.GameFragment"
         android:label="fragment_game"
         tools:layout="@layout/fragment_game" >
         <argument
@@ -43,12 +43,12 @@
     </fragment>
     <fragment
         android:id="@+id/statsFragment"
-        android:name="com.example.poke_wordle.StatsFragment"
+        android:name="com.example.poke_wordle.ui.StatsFragment"
         android:label="fragment_stats"
         tools:layout="@layout/fragment_stats" />
     <fragment
         android:id="@+id/helpFragment"
-        android:name="com.example.poke_wordle.HelpFragment"
+        android:name="com.example.poke_wordle.ui.HelpFragment"
         android:label="fragment_help"
         tools:layout="@layout/fragment_help" />
 </navigation>

@@ -1,10 +1,10 @@
-package com.example.poke_wordle
+package com.example.poke_wordle.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.poke_wordle.databinding.ActivityMainBinding
-import com.example.poke_wordle.db.AppDatabase
+import com.example.poke_wordle.data.db.AppDatabase
 import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
