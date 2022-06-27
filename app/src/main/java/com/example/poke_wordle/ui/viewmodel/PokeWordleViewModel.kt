@@ -63,21 +63,18 @@ class PokeWordleViewModel(
 
     private suspend fun fetchPokemonOfTheDay(wordleFromDB: PokeWordle?) {
         if (wordleFromDB == null) {
-            _pokemonOfTheDay.value = pokemonRepository.get(1)
-            //_pokemonOfTheDay.value = pokemonRepository.getRandomFromDB()
+            _pokemonOfTheDay.value = pokemonRepository.getRandomFromDB()
         } else {
-            _pokemonOfTheDay.value = pokemonRepository.get(1)
-            //_pokemonOfTheDay.value = pokemonRepository.get(wordleFromDB.pokemonId)
+            _pokemonOfTheDay.value = pokemonRepository.get(wordleFromDB.pokemonId)
         }
     }
 
     fun createNewGame(level: String) {
         viewModelScope.launch {
-            //val pokemonId = _pokemonOfTheDay.value!!.id
-            //val pokemonName = _pokemonOfTheDay.value!!.name
-            val pokemonId = 1
-            val pokemonName = "bulbasaur".uppercase()
+            val pokemonId = _pokemonOfTheDay.value!!.id
+            val pokemonName = _pokemonOfTheDay.value!!.name
             pokeWordlePlayRepository.newGame(level, pokemonId, pokemonName)
+            _wordle.value = pokeWordlePlayRepository.get(LocalDate.now())
         }
     }
 }

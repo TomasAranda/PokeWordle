@@ -16,7 +16,8 @@ class PokemonRepository(
     }
 
     suspend fun getRandomFromDB(): Pokemon {
-        return pokemonDao.getRandomPokemonFromList().toDomainModel()
+        val randomId = pokemonDao.selectRandomPokemon().id
+        return pokemonService.getPokemon(randomId).toDomainModel()
     }
 
 }

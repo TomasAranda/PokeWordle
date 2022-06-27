@@ -10,12 +10,18 @@ import com.example.poke_wordle.data.db.model.PokemonEntity
 
 @Dao
 interface PokemonDao {
-    @Query("SELECT * FROM `pokemon` ORDER BY RANDOM() LIMIT 1")
-    suspend fun getRandomPokemonFromList(): PokemonEntity
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(pokemon: List<PokemonEntity>)
 
+    @Query("SELECT * FROM `pokemon` ORDER BY RANDOM() LIMIT 1")
+    suspend fun getRandomPokemonFromList(): PokemonEntity
+
     @Delete
     suspend fun delete(pokemon: PokemonEntity): Int
+
+    suspend fun selectRandomPokemon(): PokemonEntity {
+        val selectedPokemon = getRandomPokemonFromList()
+        delete(selectedPokemon)
+        return selectedPokemon
+    }
 }
