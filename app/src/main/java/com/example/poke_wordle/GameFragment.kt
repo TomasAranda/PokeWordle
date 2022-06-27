@@ -63,16 +63,6 @@ class GameFragment : Fragment() {
             updateCurrentGuess(it)
         }
 
-        binding.addLetter.setOnClickListener {
-            wordleViewModel.addLetter('b')
-        }
-        binding.removeLetter.setOnClickListener {
-            wordleViewModel.removeLastLetter()
-        }
-        binding.enter.setOnClickListener {
-            wordleViewModel.addGuess()
-        }
-
         val levelsArray = resources.getStringArray(R.array.levels)
         binding.difficultyLevel.text = args.chosenGameLevel
         if (args.chosenGameLevel == levelsArray[2]) { // Difícil
