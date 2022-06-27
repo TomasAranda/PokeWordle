@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".KeyboardFragment">
+    tools:context=".ui.KeyboardFragment">
 
     <LinearLayout
         android:id="@+id/firstRow"

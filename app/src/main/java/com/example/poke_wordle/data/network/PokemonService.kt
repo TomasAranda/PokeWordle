@@ -1,4 +1,4 @@
-package com.example.poke_wordle.network
+package com.example.poke_wordle.data.network
 
 import retrofit2.Response
 import retrofit2.Retrofit

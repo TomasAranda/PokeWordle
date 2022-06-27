@@ -1,12 +1,11 @@
-package com.example.poke_wordle.db
+package com.example.poke_wordle.data.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.OnConflictStrategy
-import com.example.poke_wordle.db.model.PokemonEntity
+import com.example.poke_wordle.data.db.model.PokemonEntity
 
 
 @Dao

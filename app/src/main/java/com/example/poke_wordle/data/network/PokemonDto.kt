@@ -1,4 +1,4 @@
-package com.example.poke_wordle.network
+package com.example.poke_wordle.data.network
 
 import com.example.poke_wordle.domain.Pokemon
 import com.google.gson.annotations.SerializedName

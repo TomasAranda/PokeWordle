@@ -11,4 +11,5 @@
     <string name="show_hint">Show Hint</string>
     <string name="primary_type_of_the_pokemon">Primary type of the Pokemon</string>
     <string name="secondary_type_of_the_pokemon">Secondary type of the Pokemon</string>
+    <string name="game_background_image">Game background image</string>
 </resources>

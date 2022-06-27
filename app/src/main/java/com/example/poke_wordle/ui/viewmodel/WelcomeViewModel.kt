@@ -1,13 +1,11 @@
-package com.example.poke_wordle.viewmodel
+package com.example.poke_wordle.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.poke_wordle.db.model.toDomainModel
 import com.example.poke_wordle.domain.PokeWordle
-import com.example.poke_wordle.domain.Pokemon
-import com.example.poke_wordle.repository.PokeWordlePlayRepository
-import com.example.poke_wordle.repository.PokemonRepository
+import com.example.poke_wordle.data.repository.PokeWordlePlayRepository
+import com.example.poke_wordle.data.repository.PokemonRepository
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
