@@ -36,7 +36,7 @@ data class OfficialArtwork (
 internal fun PokemonDto.toDomainModel() =
     Pokemon(
         this.id,
-        this.name,
+        this.name.uppercase(),
         this.sprites.other?.officialArtwork?.frontDefault!!,
         this.types.map { it.type.name }
     )
