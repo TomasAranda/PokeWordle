@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
-import com.example.poke_wordle.R
 import com.example.poke_wordle.data.db.AppDatabase
 import com.example.poke_wordle.databinding.FragmentStatsBinding
 import kotlinx.coroutines.launch
