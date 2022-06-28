@@ -1,4 +1,4 @@
-package com.example.poke_wordle
+package com.example.poke_wordle.ui
 
 import android.os.Bundle
 import android.util.Log
@@ -8,29 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
-import com.example.poke_wordle.db.AppDatabase
-import com.example.poke_wordle.network.PokemonService
-import com.example.poke_wordle.repository.PokeWordlePlayRepository
-import com.example.poke_wordle.repository.PokemonRepository
-import com.example.poke_wordle.viewmodel.PokeWordleViewModel
+import com.example.poke_wordle.R
+import com.example.poke_wordle.ui.viewmodel.PokeWordleViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class WelcomeFragment : Fragment() {
-    private lateinit var wordleViewModel: PokeWordleViewModel
+    private val wordleViewModel by sharedViewModel<PokeWordleViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         super.onCreate(savedInstanceState)
-
-        val db = AppDatabase.getInstance(requireContext())
-        val pokemonDao = db.pokemonDao()
-        val pokeWordlePlayDao = db.pokeWordlePlayDao()
-        val service = PokemonService.create()
-        val pokemonRepository = PokemonRepository(service, pokemonDao)
-        val pokeWordlePlayRepository = PokeWordlePlayRepository(pokeWordlePlayDao)
-        wordleViewModel = PokeWordleViewModel(pokemonRepository, pokeWordlePlayRepository)
-
         return inflater.inflate(R.layout.fragment_welcome, container, false)
     }
 

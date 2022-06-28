@@ -1,4 +1,4 @@
-package com.example.poke_wordle
+package com.example.poke_wordle.ui
 
 import android.os.Bundle
 import android.util.Log
@@ -9,32 +9,19 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import com.example.poke_wordle.BuildConfig
+import com.example.poke_wordle.R
 import com.example.poke_wordle.databinding.FragmentHintDialogBinding
-import com.example.poke_wordle.db.AppDatabase
-import com.example.poke_wordle.network.PokemonService
-import com.example.poke_wordle.repository.PokeWordlePlayRepository
-import com.example.poke_wordle.repository.PokemonRepository
 import com.example.poke_wordle.util.MaskTransformation
-import com.example.poke_wordle.viewmodel.PokeWordleViewModel
+import com.example.poke_wordle.ui.viewmodel.PokeWordleViewModel
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.lang.Exception
 
 class PokemonImageHintDialog(private val showsPokemonType: Boolean) : DialogFragment() {
-    private lateinit var wordleViewModel: PokeWordleViewModel
+    private val wordleViewModel by sharedViewModel<PokeWordleViewModel>()
     private lateinit var binding: FragmentHintDialogBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val db = AppDatabase.getInstance(requireContext())
-        val pokemonDao = db.pokemonDao()
-        val pokeWordlePlayDao = db.pokeWordlePlayDao()
-        val service = PokemonService.create()
-        val pokemonRepository = PokemonRepository(service, pokemonDao)
-        val pokeWordlePlayRepository = PokeWordlePlayRepository(pokeWordlePlayDao)
-        wordleViewModel = PokeWordleViewModel(pokemonRepository, pokeWordlePlayRepository)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

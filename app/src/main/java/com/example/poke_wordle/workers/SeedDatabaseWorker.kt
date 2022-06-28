@@ -4,10 +4,11 @@ import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.example.poke_wordle.db.AppDatabase
-import com.example.poke_wordle.db.model.PokemonEntity
-import com.example.poke_wordle.network.PokemonList
-import com.example.poke_wordle.network.PokemonService
+import com.example.poke_wordle.data.db.AppDatabase
+import com.example.poke_wordle.data.db.model.PokemonEntity
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.google.gson.stream.JsonReader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -17,32 +18,26 @@ class SeedDatabaseWorker(
 ) : CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         try {
-            val call = PokemonService.create().getPokemonList()
-            val pokemonList = call.body()?.toEntityList()
-            if (call.isSuccessful) {
-                if (pokemonList != null) {
-                    val shortNamePokemonList = pokemonList.filter { it.name.length < 9 }
-                    AppDatabase.getInstance(applicationContext).pokemonDao().insertAll(shortNamePokemonList)
-                }
-                Result.success()
+            val filename = inputData.getString("data-filename")
+            if (filename != null) {
+                applicationContext.assets.open(filename).use { inputStream ->
+                    JsonReader(inputStream.reader()).use { jsonReader ->
+                        val pokemonType = object : TypeToken<List<PokemonEntity>>() {}.type
+                        val pokemonList: List<PokemonEntity> = Gson().fromJson(jsonReader, pokemonType)
 
+                        val database = AppDatabase.getInstance(applicationContext)
+                        database.pokemonDao().insertAll(pokemonList)
+
+                        Result.success()
+                    }
+                }
             } else {
-                Log.e("SeedDatabaseWorker", "Error seeding database - network call unsuccessful")
+                Log.e("SeedDatabaseWorker", "Error seeding database - no valid filename")
                 Result.failure()
             }
         } catch (ex: Exception) {
             Log.e("SeedDatabaseWorker", "Error seeding database", ex)
             Result.failure()
         }
-    }
-}
-
-private fun PokemonList.toEntityList(): List<PokemonEntity> {
-    return this.results.map {
-        PokemonEntity(
-            it.url.split('/').dropLast(1).last().toInt(),
-            it.name,
-            it.url
-        )
     }
 }

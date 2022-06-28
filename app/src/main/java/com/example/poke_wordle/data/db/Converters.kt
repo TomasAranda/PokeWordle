@@ -1,4 +1,4 @@
-package com.example.poke_wordle.db
+package com.example.poke_wordle.data.db
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

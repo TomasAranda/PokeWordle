@@ -1,4 +1,4 @@
-package com.example.poke_wordle.viewmodel
+package com.example.poke_wordle.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.poke_wordle.domain.PokeWordle
 import com.example.poke_wordle.domain.Pokemon
-import com.example.poke_wordle.repository.PokeWordlePlayRepository
-import com.example.poke_wordle.repository.PokemonRepository
+import com.example.poke_wordle.data.repository.PokeWordlePlayRepository
+import com.example.poke_wordle.data.repository.PokemonRepository
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -17,7 +17,7 @@ class PokeWordleViewModel(
 ) : ViewModel() {
     init {
         viewModelScope.launch {
-            val wordleFromDB = pokeWordlePlayRepository.get(LocalDate.now())
+            val wordleFromDB = pokeWordlePlayRepository.get()
             _wordle.value = wordleFromDB
             _currentGuessNumber.value = wordleFromDB?.attempts?.plus(1) ?: 1
             fetchPokemonOfTheDay(wordleFromDB)
@@ -39,9 +39,12 @@ class PokeWordleViewModel(
     fun addGuess() {
         viewModelScope.launch {
             if (currentGuess.value?.length == wordle.value?.solutionWord?.length) {
+                if (currentGuess.value == wordle.value?.solutionWord) {
+                    pokeWordlePlayRepository.setWin()
+                }
                 currentGuess.value?.let {
                     pokeWordlePlayRepository.updateGuesses(it)
-                    _wordle.value = pokeWordlePlayRepository.get(LocalDate.now())
+                    _wordle.value = pokeWordlePlayRepository.get()
                     _currentGuessNumber.value = _currentGuessNumber.value?.plus(1)
                 }
                 _currentGuess.value = ""
@@ -50,8 +53,10 @@ class PokeWordleViewModel(
     }
 
     fun addLetter(letter: Char) {
-        if (_currentGuess.value?.length!! < _wordle.value?.solutionWord?.length!!) {
-            _currentGuess.value = currentGuess.value + letter
+        if (_wordle.value?.hasWon == false) {
+            if (_currentGuess.value?.length!! < _wordle.value?.solutionWord?.length!!) {
+                _currentGuess.value = currentGuess.value + letter
+            }
         }
     }
 
@@ -63,21 +68,18 @@ class PokeWordleViewModel(
 
     private suspend fun fetchPokemonOfTheDay(wordleFromDB: PokeWordle?) {
         if (wordleFromDB == null) {
-            _pokemonOfTheDay.value = pokemonRepository.get(1)
-            //_pokemonOfTheDay.value = pokemonRepository.getRandomFromDB()
+            _pokemonOfTheDay.value = pokemonRepository.getRandomFromDB()
         } else {
-            _pokemonOfTheDay.value = pokemonRepository.get(1)
-            //_pokemonOfTheDay.value = pokemonRepository.get(wordleFromDB.pokemonId)
+            _pokemonOfTheDay.value = pokemonRepository.get(wordleFromDB.pokemonId)
         }
     }
 
     fun createNewGame(level: String) {
         viewModelScope.launch {
-            //val pokemonId = _pokemonOfTheDay.value!!.id
-            //val pokemonName = _pokemonOfTheDay.value!!.name
-            val pokemonId = 1
-            val pokemonName = "bulbasaur"
+            val pokemonId = _pokemonOfTheDay.value!!.id
+            val pokemonName = _pokemonOfTheDay.value!!.name
             pokeWordlePlayRepository.newGame(level, pokemonId, pokemonName)
+            _wordle.value = pokeWordlePlayRepository.get()
         }
     }
 }

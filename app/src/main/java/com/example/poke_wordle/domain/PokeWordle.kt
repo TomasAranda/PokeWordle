@@ -6,5 +6,6 @@ data class PokeWordle (
     val pokemonId: Int,
     val attempts: Int,
     var attemptsState: List<String> = List(6) { "" },
-    var currentGuess: MutableList<LetterState>
+    var currentGuess: MutableList<LetterState>,
+    var hasWon: Boolean = false
 )
