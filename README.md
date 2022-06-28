@@ -9,6 +9,14 @@ Ademas de las caracteristicas del Wordle se agrega la opcion de elegir 3 niveles
 * Intermedio: Se muestra el tipo del Pokemon solucion como pista
 * Difícil: No se muestra ninguna pista
 
+Para esta applicación se implementaron los siguientes conceptos:
+* Arquitectura MVVM
+* ViewModels
+* Observables con LiveData
+* Repository Pattern
+* Room DB
+* Retrofit
+
 🇬🇧 This is a [Wordle](https://www.nytimes.com/games/wordle/index.html) clone application made for Android but it has Pokemon names as 
 solution words. It's part of an assignment for University in which it was sought to make an application from scratch implementing concepts 
 learned in class.
@@ -18,15 +26,7 @@ In addition to classic wordle rules it has a feature for selecting between 3 gam
 * Intermediate: It shows the Type of the solution Pokemon as a hint
 * Hard: Doesn't shows any hint
 
-🇪🇸 Para esta applicación se implementaron los siguientes conceptos:
-* Arquitectura MVVM
-* ViewModels
-* Observables con LiveData
-* Repository Pattern
-* Room DB
-* Retrofit
-
-🇬🇧 This application was made with the following technologies:
+This application was made with the following technologies:
 * MVVM architecture
 * ViewModels
 * LiveData Obsevables
