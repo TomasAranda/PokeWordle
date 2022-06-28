@@ -1,5 +1,6 @@
 package com.example.poke_wordle.ui
 
+import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
@@ -46,6 +47,9 @@ class GameFragment : Fragment() {
             if (wordle != null) {
                 addWordleLetterViews(wordle)
                 updateLettersState(wordle)
+                if (wordle.hasWon || wordle.attempts == 6) {
+                    showGameOverDialog(wordle.hasWon)
+                }
             }
         }
 
@@ -70,6 +74,14 @@ class GameFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun showGameOverDialog(hasWon: Boolean) {
+        val message = if (hasWon) "Felicitaciones ganaste! Volvé mañana por otro pokemon" else "Perdiste :( Volvé a intertarlo mañana"
+        val dialog = AlertDialog.Builder(activity)
+            .setTitle("Game Over")
+            .setMessage(message)
+        dialog.show()
     }
 
     private fun showHintImageDialog(showsPokemonType: Boolean) {
