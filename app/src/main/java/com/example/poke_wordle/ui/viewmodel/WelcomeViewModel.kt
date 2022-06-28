@@ -17,7 +17,7 @@ class WelcomeViewModel(
 
     val wordlePlay = MutableLiveData<PokeWordle>().also {
         viewModelScope.launch {
-            pokeWordlePlayRepository.get(LocalDate.now())
+            pokeWordlePlayRepository.get()
         }
     }
 

@@ -12,6 +12,9 @@ interface WordlePlayDao {
     @Query("SELECT * FROM `pokewordle-play` WHERE date = :date")
     suspend fun getWordlePlay(date: LocalDate): WordlePlayEntity?
 
+    @Query("UPDATE `pokewordle-play` SET hasWon=1 WHERE date = :date")
+    suspend fun updateWordlePlayWinningState(date: LocalDate)
+
     @Query("UPDATE `pokewordle-play` SET attemptsState=:newAttempts, attempts= attempts + 1 WHERE date = :date")
     suspend fun updateWordlePlayGuesses(newAttempts: List<String>, date: LocalDate)
 

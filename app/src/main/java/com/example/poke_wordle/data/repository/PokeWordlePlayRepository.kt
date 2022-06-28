@@ -21,8 +21,8 @@ class PokeWordlePlayRepository(
         wordlePlayDao.insertWordlePlay(newGame)
     }
 
-    suspend fun get(date: LocalDate): PokeWordle? {
-        return wordlePlayDao.getWordlePlay(date)?.toDomainModel()
+    suspend fun get(): PokeWordle? {
+        return wordlePlayDao.getWordlePlay(LocalDate.now())?.toDomainModel()
     }
 
     suspend fun updateGuesses(newGuess: String) {
@@ -31,6 +31,10 @@ class PokeWordlePlayRepository(
             if (index == currentPlay.attempts) newGuess else guess
         }
         newGuesses?.let { wordlePlayDao.updateWordlePlayGuesses(it, LocalDate.now()) }
+    }
+
+    suspend fun setWin() {
+        wordlePlayDao.updateWordlePlayWinningState(LocalDate.now())
     }
 
 }

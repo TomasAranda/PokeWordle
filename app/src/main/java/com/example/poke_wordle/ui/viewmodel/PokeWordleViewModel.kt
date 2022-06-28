@@ -17,7 +17,7 @@ class PokeWordleViewModel(
 ) : ViewModel() {
     init {
         viewModelScope.launch {
-            val wordleFromDB = pokeWordlePlayRepository.get(LocalDate.now())
+            val wordleFromDB = pokeWordlePlayRepository.get()
             _wordle.value = wordleFromDB
             _currentGuessNumber.value = wordleFromDB?.attempts?.plus(1) ?: 1
             fetchPokemonOfTheDay(wordleFromDB)
@@ -39,9 +39,12 @@ class PokeWordleViewModel(
     fun addGuess() {
         viewModelScope.launch {
             if (currentGuess.value?.length == wordle.value?.solutionWord?.length) {
+                if (currentGuess.value == wordle.value?.solutionWord) {
+                    pokeWordlePlayRepository.setWin()
+                }
                 currentGuess.value?.let {
                     pokeWordlePlayRepository.updateGuesses(it)
-                    _wordle.value = pokeWordlePlayRepository.get(LocalDate.now())
+                    _wordle.value = pokeWordlePlayRepository.get()
                     _currentGuessNumber.value = _currentGuessNumber.value?.plus(1)
                 }
                 _currentGuess.value = ""
@@ -50,8 +53,10 @@ class PokeWordleViewModel(
     }
 
     fun addLetter(letter: Char) {
-        if (_currentGuess.value?.length!! < _wordle.value?.solutionWord?.length!!) {
-            _currentGuess.value = currentGuess.value + letter
+        if (_wordle.value?.hasWon == false) {
+            if (_currentGuess.value?.length!! < _wordle.value?.solutionWord?.length!!) {
+                _currentGuess.value = currentGuess.value + letter
+            }
         }
     }
 
@@ -74,7 +79,7 @@ class PokeWordleViewModel(
             val pokemonId = _pokemonOfTheDay.value!!.id
             val pokemonName = _pokemonOfTheDay.value!!.name
             pokeWordlePlayRepository.newGame(level, pokemonId, pokemonName)
-            _wordle.value = pokeWordlePlayRepository.get(LocalDate.now())
+            _wordle.value = pokeWordlePlayRepository.get()
         }
     }
 }
