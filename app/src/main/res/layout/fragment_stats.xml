@@ -6,4 +6,26 @@
     android:background="@drawable/disenio_juego_limpia"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".ui.StatsFragment" />
+    tools:context=".ui.StatsFragment" >
+    <TextView
+        android:id="@+id/play_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Total Jugadas"
+        android:textColor="@color/black"
+        android:textSize="30sp"/>
+    <TextView
+        android:id="@+id/win_percentage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Porcentaje ganados"
+        android:textColor="@color/black"
+        android:textSize="30sp"/>
+    <TextView
+        android:id="@+id/attempts_percentage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Porcentaje por intentos"
+        android:textColor="@color/black"
+        android:textSize="30sp"/>
+</LinearLayout>
