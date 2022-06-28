@@ -26,7 +26,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class GameFragment : Fragment() {
     private lateinit var binding: FragmentGameBinding
-    private val wordleViewModel by sharedViewModel<PokeWordleViewModel>()
+    private val wordleViewModel by +<PokeWordleViewModel>()
     private var currentRowResource = 0
     private val args: GameFragmentArgs by navArgs()
 
