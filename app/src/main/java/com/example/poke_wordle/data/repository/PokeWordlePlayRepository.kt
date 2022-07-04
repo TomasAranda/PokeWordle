@@ -25,6 +25,26 @@ class PokeWordlePlayRepository(
         return wordlePlayDao.getWordlePlay(LocalDate.now())?.toDomainModel()
     }
 
+    suspend fun getCount(): Int {
+        return wordlePlayDao.getWordlePlayCount()
+    }
+
+    suspend fun getWinPercentage(): Double {
+        val total = wordlePlayDao.getWordlePlayCount()
+        val totalWins = wordlePlayDao.getWordlePlayWinsCount()
+        return totalWins / total.toDouble()
+    }
+
+    suspend fun getWinPercentagesByAttempts(level: String = ""): List<Double> {
+        val percentagesByAttempts = MutableList(6) { 0.0 }
+        val totalCount = wordlePlayDao.getWordlePlayCount()
+        for (attempt in 1..6) {
+            val countByAttempt = wordlePlayDao.getWordlePlayCountByAttempts(attempt)
+            percentagesByAttempts[attempt-1] = countByAttempt / totalCount.toDouble()
+        }
+        return percentagesByAttempts.toList()
+    }
+
     suspend fun updateGuesses(newGuess: String) {
         val currentPlay = wordlePlayDao.getWordlePlay(LocalDate.now())
         val newGuesses = currentPlay?.attemptsState?.mapIndexed { index, guess ->

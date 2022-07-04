@@ -5,6 +5,7 @@ import com.example.poke_wordle.data.network.PokemonService
 import com.example.poke_wordle.data.repository.PokeWordlePlayRepository
 import com.example.poke_wordle.data.repository.PokemonRepository
 import com.example.poke_wordle.ui.viewmodel.PokeWordleViewModel
+import com.example.poke_wordle.ui.viewmodel.StatsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -16,4 +17,5 @@ val wordleModule = module {
     single { PokeWordlePlayRepository(get()) }
 
     viewModel { PokeWordleViewModel(get(), get()) }
+    viewModel { StatsViewModel(get()) }
 }
