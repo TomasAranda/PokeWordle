@@ -21,32 +21,13 @@ interface WordlePlayDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertWordlePlay(play: WordlePlayEntity)
 
-    // TODO("ADD QUERY TO RETURN PLAY STATS")
-    // Total jugadas: (SQL COUNT)
+    // STATS
     @Query("SELECT COUNT(*) FROM `pokewordle-play`")
     suspend fun getWordlePlayCount(): Int
 
     @Query("SELECT COUNT(*) FROM `pokewordle-play` WHERE hasWon=1")
     suspend fun getWordlePlayWinsCount(): Int
 
-    // Porcentaje de Victorias
-    suspend fun getWordlePlayWinPercentage(): Float {
-        val total = getWordlePlayCount()
-        val totalWins = getWordlePlayWinsCount()
-        return totalWins/ total.toFloat()
-    }
-
     @Query("SELECT COUNT(*) FROM `pokewordle-play` WHERE attempts=:attempts")
     suspend fun getWordlePlayCountByAttempts(attempts: Int): Int
-
-    // Porcentaje de intentos por jugada
-    suspend fun getWordleAttemptsPercentages(): List<Double> {
-        val percentagesByAttempts = MutableList(6) { 0.0 }
-        val totalCount = getWordlePlayCount()
-        for (attempt in 1..6) {
-            val countByAttempt = getWordlePlayCountByAttempts(attempt)
-            percentagesByAttempts[attempt-1] = countByAttempt / totalCount.toDouble()
-        }
-        return percentagesByAttempts.toList()
-    }
 }
