@@ -7,45 +7,61 @@
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".ui.StatsFragment" >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Estadísticas"
+        android:textColor="@color/black"
+        android:textAlignment="center"
+        android:textSize="50sp"
+        android:fontFamily="@font/pokemon_solid"
+        android:layout_marginVertical="30dp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
-        <TextView
+        android:gravity="center"
+        android:layout_marginVertical="15dp">
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total Jugadas:"
-            android:textColor="@color/black"
-            android:textSize="30sp"
-            android:layout_marginEnd="10dp"/>
-        <TextView
-            android:id="@+id/play_count"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginHorizontal="10dp">
+            <TextView
+                android:id="@+id/play_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="15"
+                android:textColor="@color/black"
+                android:textSize="40sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Jugadas"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="15"
-            android:textColor="@color/black"
-            android:textSize="30sp"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Porcentaje Ganados:"
-            android:textColor="@color/black"
-            android:textSize="30sp"
-            android:layout_marginEnd="10dp"/>
-        <TextView
-            android:id="@+id/win_percentage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="85%"
-            android:textColor="@color/black"
-            android:textSize="30sp"/>
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginHorizontal="10dp">
+            <TextView
+                android:id="@+id/win_percentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="85%"
+                android:textColor="@color/black"
+                android:textSize="40sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Porcentaje Ganados:"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+        </LinearLayout>
     </LinearLayout>
     <TextView
         android:id="@+id/attempts_percentage"
@@ -67,6 +83,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:background="#FAFAFA"
                 android:text="1:"
                 android:textSize="30sp"/>
             <TextView
@@ -94,6 +112,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2:"
+                android:textColor="@color/black"
+                android:background="#FAFAFA"
                 android:textSize="30sp"/>
             <TextView
                 android:id="@+id/chart_bar_2"
@@ -120,6 +140,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3:"
+                android:textColor="@color/black"
+                android:background="#FAFAFA"
                 android:textSize="30sp"/>
             <TextView
                 android:id="@+id/chart_bar_3"
@@ -146,6 +168,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="4:"
+                android:textColor="@color/black"
+                android:background="#FAFAFA"
                 android:textSize="30sp"/>
             <TextView
                 android:id="@+id/chart_bar_4"
@@ -172,6 +196,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="5:"
+                android:textColor="@color/black"
+                android:background="#FAFAFA"
                 android:textSize="30sp"/>
             <TextView
                 android:id="@+id/chart_bar_5"
@@ -198,6 +224,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="6:"
+                android:textColor="@color/black"
+                android:background="#FAFAFA"
                 android:textSize="30sp"/>
             <TextView
                 android:id="@+id/chart_bar_6"
