@@ -28,6 +28,6 @@ interface WordlePlayDao {
     @Query("SELECT COUNT(*) FROM `pokewordle-play` WHERE hasWon=1")
     suspend fun getWordlePlayWinsCount(): Int
 
-    @Query("SELECT COUNT(*) FROM `pokewordle-play` WHERE attempts=:attempts")
-    suspend fun getWordlePlayCountByAttempts(attempts: Int): Int
+    @Query("SELECT COUNT(*) FROM `pokewordle-play` WHERE attempts=:attempts AND hasWon=1")
+    suspend fun getWonPlaysCountByAttempts(attempts: Int): Int
 }

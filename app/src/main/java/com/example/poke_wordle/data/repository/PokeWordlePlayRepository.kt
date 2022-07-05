@@ -5,6 +5,7 @@ import com.example.poke_wordle.data.db.model.WordlePlayEntity
 import com.example.poke_wordle.data.db.model.toDomainModel
 import com.example.poke_wordle.domain.PokeWordle
 import java.time.LocalDate
+import kotlin.math.roundToInt
 
 class PokeWordlePlayRepository(
     private val wordlePlayDao: WordlePlayDao
@@ -32,15 +33,22 @@ class PokeWordlePlayRepository(
     suspend fun getWinPercentage(): Double {
         val total = wordlePlayDao.getWordlePlayCount()
         val totalWins = wordlePlayDao.getWordlePlayWinsCount()
-        return totalWins / total.toDouble()
+        return if (total != 0) {
+            ((totalWins / total.toDouble()) * 1000.0).roundToInt().toDouble() / 10
+        } else {
+            0.0
+        }
     }
 
     suspend fun getWinPercentagesByAttempts(level: String = ""): List<Double> {
         val percentagesByAttempts = MutableList(6) { 0.0 }
         val totalCount = wordlePlayDao.getWordlePlayCount()
-        for (attempt in 1..6) {
-            val countByAttempt = wordlePlayDao.getWordlePlayCountByAttempts(attempt)
-            percentagesByAttempts[attempt-1] = countByAttempt / totalCount.toDouble()
+        if (totalCount > 0) {
+            for (attempt in 1..6) {
+                val countByAttempt = wordlePlayDao.getWonPlaysCountByAttempts(attempt)
+                val roundedPercentage = ((countByAttempt / totalCount.toDouble()) * 1000.0).roundToInt().toDouble() / 10
+                percentagesByAttempts[attempt-1] = roundedPercentage
+            }
         }
         return percentagesByAttempts.toList()
     }

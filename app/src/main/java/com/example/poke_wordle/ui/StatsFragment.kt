@@ -1,16 +1,16 @@
 package com.example.poke_wordle.ui
 
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
-import com.example.poke_wordle.data.db.AppDatabase
-import com.example.poke_wordle.data.repository.PokeWordlePlayRepository
+import android.widget.TextView
+import com.example.poke_wordle.BuildConfig
 import com.example.poke_wordle.databinding.FragmentStatsBinding
 import com.example.poke_wordle.ui.viewmodel.StatsViewModel
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class StatsFragment : Fragment() {
@@ -27,13 +27,39 @@ class StatsFragment : Fragment() {
             binding.playCount.text = it.toString()
         }
         model.winPercentage.observe(viewLifecycleOwner) {
-            binding.winPercentage.text = (100.00 * it).toString() + "%"
+            binding.winPercentage.text = "${it}%"
         }
         model.winPercentagesByAttempt.observe(viewLifecycleOwner) {
-            binding.attemptsPercentage.text = it.map { percentage -> (percentage * 100.00).toString() + "%" }.toString()
+            setStatChartViews(it)
         }
 
         return binding.root
+    }
+
+    private fun setStatChartViews(percentages: List<Double>) {
+        for ((index, percentage) in percentages.withIndex()) {
+            val chartBarResource = resources.getIdentifier("chart_bar_${index + 1}", "id",
+                BuildConfig.APPLICATION_ID
+            )
+            val chartBarView = view?.findViewById<TextView>(chartBarResource)
+            if (percentage > 0.0) {
+                chartBarView?.text = "${percentage}%"
+                chartBarView?.setBackgroundColor(Color.parseColor("#6aaa64"))
+            } else {
+                chartBarView?.text = "0%"
+            }
+            val currentWidth = chartBarView?.width
+            val layoutParams = chartBarView?.layoutParams
+            Log.d("PERCENTAGE", percentage.toString())
+            if (percentage > 21.0) {
+                val newWidth = (currentWidth!!.toDouble() * percentage / 100).toInt()
+                layoutParams?.width = newWidth
+                chartBarView.layoutParams = layoutParams
+            } else {
+                layoutParams?.width = ViewGroup.LayoutParams.WRAP_CONTENT
+                chartBarView?.layoutParams = layoutParams
+            }
+        }
     }
 
 }
