@@ -1,7 +1,6 @@
 package com.example.poke_wordle.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -29,13 +28,11 @@ class WelcomeFragment : Fragment() {
         val playButton = view.findViewById<Button>(R.id.play_button)
         wordleViewModel.wordle.observe(viewLifecycleOwner) { wordle ->
             if (wordle != null) {
-                Log.d("WELCOME FRAGMENT", "WORDLE PLAY NOT NULL")
                 playButton.setOnClickListener {
                     val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment(wordle.level)
                     findNavController().navigate(action)
                 }
             } else {
-                Log.d("WELCOME FRAGMENT", "WORDLE PLAY NULL")
                 playButton.setOnClickListener {
                     showLevelPickerDialog { level ->
                         val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment(level)

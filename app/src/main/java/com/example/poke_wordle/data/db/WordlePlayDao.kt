@@ -21,9 +21,13 @@ interface WordlePlayDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertWordlePlay(play: WordlePlayEntity)
 
-    // TODO("ADD QUERY TO RETURN PLAY STATS")
-    // Total jugadas: (SQL COUNT)
-    // Porcentaje de Victorias
-    // Porcentaje de intentos por jugada
-    // Racha actual y Mejor Racha (SQL GAPS AND ISLANDS)
+    // STATS
+    @Query("SELECT COUNT(*) FROM `pokewordle-play`")
+    suspend fun getWordlePlayCount(): Int
+
+    @Query("SELECT COUNT(*) FROM `pokewordle-play` WHERE hasWon=1")
+    suspend fun getWordlePlayWinsCount(): Int
+
+    @Query("SELECT COUNT(*) FROM `pokewordle-play` WHERE attempts=:attempts AND hasWon=1")
+    suspend fun getWonPlaysCountByAttempts(attempts: Int): Int
 }
