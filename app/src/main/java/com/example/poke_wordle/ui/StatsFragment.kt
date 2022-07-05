@@ -2,7 +2,6 @@ package com.example.poke_wordle.ui
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +11,7 @@ import com.example.poke_wordle.BuildConfig
 import com.example.poke_wordle.databinding.FragmentStatsBinding
 import com.example.poke_wordle.ui.viewmodel.StatsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.math.sqrt
 
 class StatsFragment : Fragment() {
     private lateinit var binding: FragmentStatsBinding
@@ -50,9 +50,8 @@ class StatsFragment : Fragment() {
             }
             val currentWidth = chartBarView?.width
             val layoutParams = chartBarView?.layoutParams
-            Log.d("PERCENTAGE", percentage.toString())
-            if (percentage > 21.0) {
-                val newWidth = (currentWidth!!.toDouble() * percentage / 100).toInt()
+            if (percentage > 5.0) {
+                val newWidth = (currentWidth!!.toDouble() * sqrt(percentage / 100)).toInt()
                 layoutParams?.width = newWidth
                 chartBarView.layoutParams = layoutParams
             } else {

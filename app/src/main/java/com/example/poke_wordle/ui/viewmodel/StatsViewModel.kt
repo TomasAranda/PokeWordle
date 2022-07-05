@@ -14,9 +14,11 @@ class StatsViewModel(
     init {
         viewModelScope.launch {
             val count = pokeWordlePlayRepository.getCount()
+            val winPercentages = pokeWordlePlayRepository.getWinPercentage()
+            val winPercentagesByAttempts = pokeWordlePlayRepository.getWinPercentagesByAttempts()
             _playCount.value = count
-            _winPercentage.value = pokeWordlePlayRepository.getWinPercentage()
-            _winPercentagesByAttempt.value = pokeWordlePlayRepository.getWinPercentagesByAttempts()
+            _winPercentage.value = winPercentages
+            _winPercentagesByAttempt.value = winPercentagesByAttempts
         }
     }
 
