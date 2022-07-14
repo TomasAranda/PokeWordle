@@ -43,13 +43,11 @@ class WelcomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.statsButton.setOnClickListener {
-            val action = WelcomeFragmentDirections.actionWelcomeFragmentToStatsFragment()
-            findNavController().navigate(action)
+            findNavController().navigate(R.id.action_welcomeFragment_to_statsFragment)
         }
 
         binding.helpButton.setOnClickListener {
-            val action = WelcomeFragmentDirections.actionWelcomeFragmentToHelpFragment()
-            findNavController().navigate(action)
+            findNavController().navigate(R.id.action_welcomeFragment_to_helpFragment)
         }
     }
 
