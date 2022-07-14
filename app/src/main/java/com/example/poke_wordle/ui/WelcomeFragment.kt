@@ -29,14 +29,12 @@ class WelcomeFragment : Fragment() {
         wordleViewModel.wordle.observe(viewLifecycleOwner) { wordle ->
             if (wordle != null) {
                 playButton.setOnClickListener {
-                    val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment(wordle.level)
-                    findNavController().navigate(action)
+                    findNavController().navigate(R.id.action_welcomeFragment_to_gameFragment)
                 }
             } else {
                 playButton.setOnClickListener {
-                    showLevelPickerDialog { level ->
-                        val action = WelcomeFragmentDirections.actionWelcomeFragmentToGameFragment(level)
-                        findNavController().navigate(action)
+                    showLevelPickerDialog {
+                        findNavController().navigate(R.id.action_welcomeFragment_to_gameFragment)
                     }
                 }
             }
@@ -53,7 +51,7 @@ class WelcomeFragment : Fragment() {
         }
     }
 
-    private fun showLevelPickerDialog(navigationAction: (String) -> Unit) {
+    private fun showLevelPickerDialog(navigationAction: () -> Unit) {
         val dialog = LevelsPickerDialogFragment(navigationAction)
         dialog.show(parentFragmentManager, "Select level")
     }

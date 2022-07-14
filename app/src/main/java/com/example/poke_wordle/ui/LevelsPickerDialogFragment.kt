@@ -9,7 +9,7 @@ import com.example.poke_wordle.R
 import com.example.poke_wordle.ui.viewmodel.PokeWordleViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class LevelsPickerDialogFragment(val onSelect: (String) -> Unit) : DialogFragment() {
+class LevelsPickerDialogFragment(val onSelect: () -> Unit) : DialogFragment() {
     private val wordleViewModel by sharedViewModel<PokeWordleViewModel>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -21,7 +21,7 @@ class LevelsPickerDialogFragment(val onSelect: (String) -> Unit) : DialogFragmen
                 .setItems(R.array.levels) { _, which ->
                     val level = resources.getStringArray(R.array.levels)[which]
                     wordleViewModel.createNewGame(level)
-                    onSelect(level)
+                    onSelect()
                 }
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
