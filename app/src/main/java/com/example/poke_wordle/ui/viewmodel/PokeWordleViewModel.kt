@@ -9,6 +9,7 @@ import com.example.poke_wordle.domain.PokeWordle
 import com.example.poke_wordle.domain.Pokemon
 import com.example.poke_wordle.data.repository.PokeWordlePlayRepository
 import com.example.poke_wordle.data.repository.PokemonRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PokeWordleViewModel(
@@ -24,27 +25,23 @@ class PokeWordleViewModel(
     private val _currentGuess = MutableLiveData("")
     val currentGuess: LiveData<String> = _currentGuess
 
-    private val _currentGuessNumber = MutableLiveData<Int>()
-    val currentGuessNumber: LiveData<Int> = _currentGuessNumber
-
     init {
         viewModelScope.launch {
-            _currentGuessNumber.value = wordle.value?.attempts?.plus(1) ?: 1
+            // TODO("Wait wordle value from DB")
+            delay(1000)
             fetchPokemonOfTheDay(wordle.value)
         }
     }
 
     fun addGuess() {
-        viewModelScope.launch {
-            if (currentGuess.value?.length == wordle.value?.solutionWord?.length) {
-                if (currentGuess.value == wordle.value?.solutionWord) {
+        val newGuess = currentGuess.value
+        if (newGuess?.length == wordle.value?.solutionWord?.length) {
+            _currentGuess.value = ""
+            viewModelScope.launch {
+                if (newGuess == wordle.value?.solutionWord) {
                     pokeWordlePlayRepository.setWin()
                 }
-                currentGuess.value?.let {
-                    pokeWordlePlayRepository.updateGuesses(it)
-                    _currentGuessNumber.value = _currentGuessNumber.value?.plus(1)
-                }
-                _currentGuess.value = ""
+                newGuess?.let { pokeWordlePlayRepository.updateGuesses(it) }
             }
         }
     }

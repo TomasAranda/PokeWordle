@@ -43,6 +43,7 @@ class GameFragment : Fragment() {
 
         wordleViewModel.wordle.observe(viewLifecycleOwner) { wordle ->
             if (wordle != null) {
+                updateCurrentRow(wordle.attempts + 1)
                 addWordleLetterViews(wordle)
                 updateLettersState(wordle)
                 if (wordle.hasWon || wordle.attempts == 6) {
@@ -51,9 +52,6 @@ class GameFragment : Fragment() {
             }
         }
 
-        wordleViewModel.currentGuessNumber.observe(viewLifecycleOwner) {
-            updateCurrentRow(it)
-        }
         wordleViewModel.currentGuess.observe(viewLifecycleOwner) {
             updateCurrentGuess(it)
         }
