@@ -5,12 +5,16 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.poke_wordle.data.db.model.WordlePlayEntity
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
 @Dao
 interface WordlePlayDao {
     @Query("SELECT * FROM `pokewordle-play` WHERE date = :date")
     suspend fun getWordlePlay(date: LocalDate): WordlePlayEntity?
+
+    @Query("SELECT * FROM `pokewordle-play` WHERE date = :date")
+    fun getObservableWordlePlay(date: LocalDate): Flow<WordlePlayEntity?>
 
     @Query("UPDATE `pokewordle-play` SET hasWon=1 WHERE date = :date")
     suspend fun updateWordlePlayWinningState(date: LocalDate)

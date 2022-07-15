@@ -16,15 +16,3 @@ data class WordlePlayEntity (
     var hasWon: Boolean,
     val level: String
 )
-
-internal fun WordlePlayEntity.toDomainModel(): PokeWordle {
-    return PokeWordle(
-        this.level,
-        this.solutionWord,
-        this.pokemonId,
-        this.attempts,
-        this.attemptsState,
-        mutableListOf(),
-        this.hasWon
-    )
-}
