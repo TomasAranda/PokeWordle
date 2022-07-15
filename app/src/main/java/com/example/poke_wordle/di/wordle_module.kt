@@ -2,6 +2,7 @@ package com.example.poke_wordle.di
 
 import com.example.poke_wordle.data.db.AppDatabase
 import com.example.poke_wordle.data.db.model.WordlePlayEntityMapper
+import com.example.poke_wordle.data.network.PokemonDtoMapper
 import com.example.poke_wordle.data.network.PokemonService
 import com.example.poke_wordle.data.repository.PokeWordlePlayRepository
 import com.example.poke_wordle.data.repository.PokemonRepository
@@ -11,11 +12,12 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val wordleModule = module {
-    single { AppDatabase.getInstance(get()).pokeWordlePlayDao() }
     single { AppDatabase.getInstance(get()).pokemonDao() }
+    single { PokemonDtoMapper() }
     single { PokemonService.create() }
+    single { AppDatabase.getInstance(get()).pokeWordlePlayDao() }
     single { WordlePlayEntityMapper() }
-    single { PokemonRepository(get(), get()) }
+    single { PokemonRepository(get(), get(), get()) }
     single { PokeWordlePlayRepository(get(), get()) }
 
     viewModel { PokeWordleViewModel(get(), get()) }
