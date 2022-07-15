@@ -10,6 +10,8 @@ import com.example.poke_wordle.domain.Pokemon
 import com.example.poke_wordle.data.repository.PokeWordlePlayRepository
 import com.example.poke_wordle.data.repository.PokemonRepository
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 
 class PokeWordleViewModel(
@@ -20,16 +22,18 @@ class PokeWordleViewModel(
     private val _pokemonOfTheDay = MutableLiveData<Pokemon>()
     val pokemonOfTheDay: LiveData<Pokemon> = _pokemonOfTheDay
 
-    val wordle = pokeWordlePlayRepository.get().asLiveData()
+    lateinit var wordle: LiveData<PokeWordle?>
 
     private val _currentGuess = MutableLiveData("")
     val currentGuess: LiveData<String> = _currentGuess
 
     init {
         viewModelScope.launch {
-            // TODO("Wait wordle value from DB")
-            delay(1000)
-            fetchPokemonOfTheDay(wordle.value)
+            val wordleFlow = pokeWordlePlayRepository.get()
+            wordle = wordleFlow.asLiveData()
+            wordleFlow.collect {
+                fetchPokemonOfTheDay(it)
+            }
         }
     }
 
