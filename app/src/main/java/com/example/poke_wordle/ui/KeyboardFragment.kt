@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.view.forEach
+import com.example.poke_wordle.data.db.model.toDomainModel
 import com.example.poke_wordle.databinding.FragmentKeyboardBinding
 import com.example.poke_wordle.domain.LetterState
 import com.example.poke_wordle.domain.PokeWordle
@@ -27,7 +28,7 @@ class KeyboardFragment : Fragment() {
 
         wordleViewModel.wordle.observe(viewLifecycleOwner) { wordle ->
             if (wordle != null) {
-                updateLettersState(wordle)
+                updateLettersState(wordle.toDomainModel())
             }
         }
 

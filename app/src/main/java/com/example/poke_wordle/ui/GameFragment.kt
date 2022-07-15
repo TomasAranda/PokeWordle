@@ -15,9 +15,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.forEachIndexed
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
 import com.example.poke_wordle.BuildConfig
 import com.example.poke_wordle.R
+import com.example.poke_wordle.data.db.model.toDomainModel
 import com.example.poke_wordle.databinding.FragmentGameBinding
 import com.example.poke_wordle.domain.LetterState
 import com.example.poke_wordle.domain.PokeWordle
@@ -44,8 +44,8 @@ class GameFragment : Fragment() {
 
         wordleViewModel.wordle.observe(viewLifecycleOwner) { wordle ->
             if (wordle != null) {
-                addWordleLetterViews(wordle)
-                updateLettersState(wordle)
+                addWordleLetterViews(wordle.toDomainModel())
+                updateLettersState(wordle.toDomainModel())
                 if (wordle.hasWon || wordle.attempts == 6) {
                     showGameOverDialog(wordle.hasWon)
                 }
