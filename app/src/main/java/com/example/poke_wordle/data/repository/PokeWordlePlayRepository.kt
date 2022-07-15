@@ -2,11 +2,14 @@ package com.example.poke_wordle.data.repository
 
 import com.example.poke_wordle.data.db.WordlePlayDao
 import com.example.poke_wordle.data.db.model.WordlePlayEntity
+import com.example.poke_wordle.data.db.model.WordlePlayEntityMapper
+import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 import kotlin.math.roundToInt
 
 class PokeWordlePlayRepository(
-    private val wordlePlayDao: WordlePlayDao
+    private val wordlePlayDao: WordlePlayDao,
+    private val mapper: WordlePlayEntityMapper
 ) {
     suspend fun newGame(level: String, pokemonId: Int, pokemonName: String) {
         val newGame = WordlePlayEntity(
@@ -21,7 +24,7 @@ class PokeWordlePlayRepository(
         wordlePlayDao.insertWordlePlay(newGame)
     }
 
-    fun get() = wordlePlayDao.getObservableWordlePlay(LocalDate.now())
+    fun get() = wordlePlayDao.getObservableWordlePlay(LocalDate.now()).map { mapper.mapToDomainModel(it) }
 
     suspend fun getCount(): Int {
         return wordlePlayDao.getWordlePlayCount()

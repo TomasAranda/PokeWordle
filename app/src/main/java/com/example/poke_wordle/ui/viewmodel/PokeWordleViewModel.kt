@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.asLiveData
-import com.example.poke_wordle.data.db.model.toDomainModel
 import com.example.poke_wordle.domain.PokeWordle
 import com.example.poke_wordle.domain.Pokemon
 import com.example.poke_wordle.data.repository.PokeWordlePlayRepository
@@ -30,8 +29,8 @@ class PokeWordleViewModel(
 
     init {
         viewModelScope.launch {
-            _currentGuessNumber.value = wordle.value?.toDomainModel()?.attempts?.plus(1) ?: 1
-            fetchPokemonOfTheDay(wordle.value?.toDomainModel())
+            _currentGuessNumber.value = wordle.value?.attempts?.plus(1) ?: 1
+            fetchPokemonOfTheDay(wordle.value)
         }
     }
 
