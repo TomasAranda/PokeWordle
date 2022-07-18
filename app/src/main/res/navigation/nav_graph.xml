@@ -37,9 +37,6 @@
         android:name="com.example.poke_wordle.ui.GameFragment"
         android:label="fragment_game"
         tools:layout="@layout/fragment_game" >
-        <argument
-            android:name="chosenGameLevel"
-            app:argType="string"/>
     </fragment>
     <fragment
         android:id="@+id/statsFragment"

@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.forEachIndexed
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
 import com.example.poke_wordle.BuildConfig
 import com.example.poke_wordle.R
 import com.example.poke_wordle.databinding.FragmentGameBinding
@@ -28,7 +27,6 @@ class GameFragment : Fragment() {
     private lateinit var binding: FragmentGameBinding
     private val wordleViewModel by +<PokeWordleViewModel>()
     private var currentRowResource = 0
-    private val args: GameFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +43,7 @@ class GameFragment : Fragment() {
 
         wordleViewModel.wordle.observe(viewLifecycleOwner) { wordle ->
             if (wordle != null) {
+                updateCurrentRow(wordle.attempts + 1)
                 addWordleLetterViews(wordle)
                 updateLettersState(wordle)
                 if (wordle.hasWon || wordle.attempts == 6) {
@@ -53,22 +52,21 @@ class GameFragment : Fragment() {
             }
         }
 
-        wordleViewModel.currentGuessNumber.observe(viewLifecycleOwner) {
-            updateCurrentRow(it)
-        }
         wordleViewModel.currentGuess.observe(viewLifecycleOwner) {
             updateCurrentGuess(it)
         }
 
-        val levelsArray = resources.getStringArray(R.array.levels)
-        binding.difficultyLevel.text = args.chosenGameLevel
-        if (args.chosenGameLevel == levelsArray[2]) { // Difícil
-            removeHintButton()
-        } else {
-            binding.hintButton.setOnClickListener {
-                when (args.chosenGameLevel) {
-                    levelsArray[0] -> showHintImageDialog(false)// Fácil
-                    levelsArray[1] -> showHintImageDialog(true) // Intermedio
+        wordleViewModel.wordle.observe(viewLifecycleOwner) { wordle ->
+            val levelsArray = resources.getStringArray(R.array.levels)
+            binding.difficultyLevel.text = wordle?.level
+            if (wordle?.level == levelsArray[2]) { // Difícil
+                removeHintButton()
+            } else {
+                binding.hintButton.setOnClickListener {
+                    when (wordle?.level) {
+                        levelsArray[0] -> showHintImageDialog(false)// Fácil
+                        levelsArray[1] -> showHintImageDialog(true) // Intermedio
+                    }
                 }
             }
         }

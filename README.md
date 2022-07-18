@@ -1,6 +1,9 @@
 # PokeWordle - Android
 
-🇪🇸 Esta es una aplicación hecha para Android y es un clon del Juego [Wordle](https://www.nytimes.com/games/wordle/index.html) pero utiliza 
+---
+
+🇪🇸 
+Esta es una aplicación hecha para Android y es un clon del Juego [Wordle](https://www.nytimes.com/games/wordle/index.html) pero utiliza 
 nombres de Pokemon como palabra solucion. Forma parte de una práctica integradora de la materia de "Programación Móvil 2" de la UNLaM 
 (Universidad Nacional de La Matanza) en la cual se buscaba realizar una aplicación desde cero implementando los conceptos aprendidos en clase.
 
@@ -17,7 +20,10 @@ Para esta applicación se implementaron los siguientes conceptos:
 * Room DB
 * Retrofit
 
-🇬🇧 This is a [Wordle](https://www.nytimes.com/games/wordle/index.html) clone application made for Android but it has Pokemon names as 
+---
+
+🇬🇧 
+This is a [Wordle](https://www.nytimes.com/games/wordle/index.html) clone application made for Android but it has Pokemon names as 
 solution words. It's part of an assignment for University in which it was sought to make an application from scratch implementing concepts 
 learned in class.
 
@@ -33,6 +39,8 @@ This application was made with the following technologies:
 * Repository Pattern
 * Room DB
 * Retrofit
+
+---
 
 ### Demostration of PokeWordle running on emulator:
 

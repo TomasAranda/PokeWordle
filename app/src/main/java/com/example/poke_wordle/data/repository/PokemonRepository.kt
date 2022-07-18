@@ -1,23 +1,23 @@
 package com.example.poke_wordle.data.repository
 
 import com.example.poke_wordle.data.db.PokemonDao
-import com.example.poke_wordle.data.db.model.toDomainModel
+import com.example.poke_wordle.data.network.PokemonDtoMapper
 import com.example.poke_wordle.domain.Pokemon
 import com.example.poke_wordle.data.network.PokemonService
-import com.example.poke_wordle.data.network.toDomainModel
 
 class PokemonRepository(
     private val pokemonService: PokemonService,
-    private val pokemonDao: PokemonDao
+    private val pokemonDao: PokemonDao,
+    private val mapper: PokemonDtoMapper
 ) {
 
     suspend fun get(id: Int): Pokemon {
-        return pokemonService.getPokemon(id).toDomainModel()
+        return mapper.mapToDomainModel(pokemonService.getPokemon(id))
     }
 
     suspend fun getRandomFromDB(): Pokemon {
         val randomId = pokemonDao.selectRandomPokemon().id
-        return pokemonService.getPokemon(randomId).toDomainModel()
+        return mapper.mapToDomainModel(pokemonService.getPokemon(randomId))
     }
 
 }

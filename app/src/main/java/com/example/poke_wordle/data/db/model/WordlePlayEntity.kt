@@ -1,6 +1,5 @@
 package com.example.poke_wordle.data.db.model
 
-import android.util.Log
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.poke_wordle.domain.PokeWordle
@@ -17,16 +16,3 @@ data class WordlePlayEntity (
     var hasWon: Boolean,
     val level: String
 )
-
-internal fun WordlePlayEntity.toDomainModel(): PokeWordle {
-    Log.d("DOMAIN MAPPER", this.attemptsState.toString())
-    return PokeWordle(
-        this.level,
-        this.solutionWord,
-        this.pokemonId,
-        this.attempts,
-        this.attemptsState,
-        mutableListOf(),
-        this.hasWon
-    )
-}
