@@ -25,7 +25,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class GameFragment : Fragment() {
     private lateinit var binding: FragmentGameBinding
-    private val wordleViewModel by sharedViewModel<PokeWordleViewModel>()
+    private val wordleViewModel by +<PokeWordleViewModel>()
     private var currentRowResource = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -210,6 +210,10 @@ class GameFragment : Fragment() {
                 (view as TextView).text = ""
             }
         }
+    }
+
+    private fun showImageWinLoose(ganador:Boolean){
+        val ganador = true;
     }
 
 }
