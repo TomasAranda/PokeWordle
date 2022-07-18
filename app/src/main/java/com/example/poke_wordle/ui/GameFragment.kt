@@ -1,6 +1,5 @@
 package com.example.poke_wordle.ui
 
-import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
@@ -25,7 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class GameFragment : Fragment() {
     private lateinit var binding: FragmentGameBinding
-    private val wordleViewModel by +<PokeWordleViewModel>()
+    private val wordleViewModel by sharedViewModel<PokeWordleViewModel>()
     private var currentRowResource = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,11 +74,8 @@ class GameFragment : Fragment() {
     }
 
     private fun showGameOverDialog(hasWon: Boolean) {
-        val message = if (hasWon) "Felicitaciones ganaste! Volvé mañana por otro pokemon" else "Perdiste :( Volvé a intertarlo mañana"
-        val dialog = AlertDialog.Builder(activity)
-            .setTitle("Game Over")
-            .setMessage(message)
-        dialog.show()
+        val dialog = GameOverDialogFragment(hasWon)
+        dialog.show(parentFragmentManager, "Game Over Dialog")
     }
 
     private fun showHintImageDialog(showsPokemonType: Boolean) {
@@ -210,10 +206,6 @@ class GameFragment : Fragment() {
                 (view as TextView).text = ""
             }
         }
-    }
-
-    private fun showImageWinLoose(ganador:Boolean){
-        val ganador = true;
     }
 
 }

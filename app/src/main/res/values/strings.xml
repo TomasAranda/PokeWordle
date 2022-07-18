@@ -12,4 +12,5 @@
     <string name="primary_type_of_the_pokemon">Primary type of the Pokemon</string>
     <string name="secondary_type_of_the_pokemon">Secondary type of the Pokemon</string>
     <string name="game_background_image">Game background image</string>
+    <string name="game_over_image">Game over image</string>
 </resources>
