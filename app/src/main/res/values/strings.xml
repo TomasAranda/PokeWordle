@@ -13,4 +13,5 @@
     <string name="secondary_type_of_the_pokemon">Secondary type of the Pokemon</string>
     <string name="game_background_image">Game background image</string>
     <string name="game_over_image">Game over image</string>
+    <string name="winning_message_dialog">Winning message dialog</string>
 </resources>
