@@ -19,9 +19,9 @@ class GameOverDialogFragment(private val hasWon :Boolean) : DialogFragment() {
     ): View {
         binding = FragmentWinLooseBinding.inflate(layoutInflater)
         if (hasWon) {
-            binding.winLooseIV.setBackgroundResource(R.drawable.pokedex_pantalla_ganadora)
+            binding.winLooseIV.setBackgroundResource(R.drawable.win_dialog)
         } else {
-            binding.winLooseIV.setBackgroundResource(R.drawable.pokedex_pantalla_perdedora)
+            binding.winLooseIV.setBackgroundResource(R.drawable.loose_dialog)
         }
         return binding.root
     }

@@ -8,7 +8,7 @@
     <ImageView
         android:id="@+id/win_looseIV"
         android:contentDescription="@string/game_over_image"
-        tools:src="@drawable/pokedex_pantalla_ganadora"
+        tools:src="@drawable/win_dialog"
         android:layout_width="320dp"
         android:layout_height="448dp"/>
 
