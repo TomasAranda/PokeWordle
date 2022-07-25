@@ -1,17 +1,12 @@
 package com.example.poke_wordle.ui
 
-import android.app.AlertDialog
-import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Space
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.view.forEachIndexed
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
@@ -21,11 +16,12 @@ import com.example.poke_wordle.databinding.FragmentGameBinding
 import com.example.poke_wordle.domain.LetterState
 import com.example.poke_wordle.domain.PokeWordle
 import com.example.poke_wordle.ui.viewmodel.PokeWordleViewModel
+import com.example.poke_wordle.ui.views.WordleLetterView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class GameFragment : Fragment() {
     private lateinit var binding: FragmentGameBinding
-    private val wordleViewModel by +<PokeWordleViewModel>()
+    private val wordleViewModel by sharedViewModel<PokeWordleViewModel>()
     private var currentRowResource = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,11 +71,8 @@ class GameFragment : Fragment() {
     }
 
     private fun showGameOverDialog(hasWon: Boolean) {
-        val message = if (hasWon) "Felicitaciones ganaste! Volvé mañana por otro pokemon" else "Perdiste :( Volvé a intertarlo mañana"
-        val dialog = AlertDialog.Builder(activity)
-            .setTitle("Game Over")
-            .setMessage(message)
-        dialog.show()
+        val dialog = GameOverDialogFragment(hasWon)
+        dialog.show(parentFragmentManager, "Game Over Dialog")
     }
 
     private fun showHintImageDialog(showsPokemonType: Boolean) {
@@ -102,12 +95,12 @@ class GameFragment : Fragment() {
             for ((index, letter) in wordlePlay.solutionWord.withIndex()) {
                 if (letter != '-') {
                     binding.apply {
-                        wordleRow1.addView(createWordleLetterView(), index)
-                        wordleRow2.addView(createWordleLetterView(), index)
-                        wordleRow3.addView(createWordleLetterView(), index)
-                        wordleRow4.addView(createWordleLetterView(), index)
-                        wordleRow5.addView(createWordleLetterView(), index)
-                        wordleRow6.addView(createWordleLetterView(), index)
+                        wordleRow1.addView(WordleLetterView(requireContext()), index)
+                        wordleRow2.addView(WordleLetterView(requireContext()), index)
+                        wordleRow3.addView(WordleLetterView(requireContext()), index)
+                        wordleRow4.addView(WordleLetterView(requireContext()), index)
+                        wordleRow5.addView(WordleLetterView(requireContext()), index)
+                        wordleRow6.addView(WordleLetterView(requireContext()), index)
                     }
                 } else {
                     binding.apply {
@@ -138,24 +131,6 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun createWordleLetterView(): TextView {
-        val tv = TextView(context)
-        tv.gravity = Gravity.CENTER
-        tv.textSize = 30F
-        tv.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-        tv.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
-        tv.typeface = Typeface.DEFAULT_BOLD
-
-        tv.setPadding(5, 5, 5, 5)
-        val params = LinearLayout.LayoutParams(
-            100, 120
-        )
-        params.setMargins(10,0, 10, 0)
-
-        tv.layoutParams = params
-        return tv
-    }
-
     private fun createWordleSpacerView(): Space {
         val spacer = Space(context)
         spacer.layoutParams = LinearLayout.LayoutParams(
@@ -179,12 +154,13 @@ class GameFragment : Fragment() {
                 val rowLinearlayout = view?.findViewById<LinearLayout>(rowResource)
                 guess.forEachIndexed { letterIndex, letter ->
                     val letterState = getLetterState(letter, letterIndex, wordle.solutionWord)
-                    val letterViewColor = when(letterState) {
-                        LetterState.CORRECT -> { Color.parseColor("#6aaa64") }
-                        LetterState.WRONG_POSITION -> { Color.parseColor("#c9b458") }
-                        LetterState.INCORRECT -> { Color.parseColor("#787c7e") }
+                    val letterView = rowLinearlayout?.get(letterIndex) as WordleLetterView
+                    letterView.isChecked = true
+                    when(letterState) {
+                        LetterState.CORRECT -> { letterView.isCorrect = true }
+                        LetterState.WRONG_POSITION -> { letterView.isPresent = true }
+                        else -> {}
                     }
-                    rowLinearlayout?.get(letterIndex)?.setBackgroundColor(letterViewColor)
                 }
             }
         }
@@ -210,10 +186,6 @@ class GameFragment : Fragment() {
                 (view as TextView).text = ""
             }
         }
-    }
-
-    private fun showImageWinLoose(ganador:Boolean){
-        val ganador = true;
     }
 
 }

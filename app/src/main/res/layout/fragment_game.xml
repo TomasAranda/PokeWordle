@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     tools:context=".ui.WelcomeFragment"
-    android:background="@drawable/disenio_juego_limpia">
+    android:background="@drawable/screen_background">
 
     <TextView
         android:id="@+id/difficulty_level"
