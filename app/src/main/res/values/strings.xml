@@ -14,4 +14,8 @@
     <string name="game_background_image">Game background image</string>
     <string name="game_over_image">Game over image</string>
     <string name="winning_message_dialog">Winning message dialog</string>
+    <drawable name="color_unchecked">#ffffff</drawable>
+    <drawable name="color_absent">#787c7e</drawable>
+    <drawable name="color_present">#c9b458</drawable>
+    <drawable name="color_correct">#6aaa64</drawable>
 </resources>
